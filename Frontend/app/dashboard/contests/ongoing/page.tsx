@@ -6,20 +6,13 @@ import Link from "next/link"
 import { displayMili } from "../helper"
 import { ContestsInfoContext } from "../layout";
 import assert from "assert";
+import ContestTable from "../components/contestTable";
 
 function OngoingContest({
     contestInfo
 }: { 
     contestInfo: ContestInfo
 }): JSX.Element {
-    const [beforeEnd, setBeforeEnd] = useState(displayMili(contestInfo.endDate.getTime() - (new Date()).getTime()));
-    useEffect(() => { 
-        const interval = setInterval(() => {
-            setBeforeEnd(displayMili(contestInfo.endDate.getTime() - new Date().getTime()));
-        }, 1000);
-    
-        return () => clearInterval(interval);
-    })
 
     return (
         <div className="min-w-0 flex gap-x-4">
@@ -27,26 +20,21 @@ function OngoingContest({
                 className="text-sm underline font-semibold leading-6 text-gray-900">
                 {contestInfo.contestName}
             </Link>
-            <p>End in {beforeEnd}</p>
+            <p></p>
         </div>
     )
 }
 
 export default function OngoingContests() { 
     const contestsInfo = useContext(ContestsInfoContext)
+    const ongoingContestsInfo = 
+        contestsInfo
+            .filter(contestsInfo => contestsInfo.startDate < new Date() && contestsInfo.endDate >= new Date())
     try {
         assert (contestsInfo != null); 
         return (
-            <div className="w-full">
-                {/* <h2>Ongoing Contests</h2> */}
-                <ul className={`divide-y divide-gray-100`}>
-                    {
-                        contestsInfo
-                            .filter(contestsInfo => contestsInfo.startDate < new Date() && contestsInfo.endDate >= new Date())
-                            .map((contestInfo) => 
-                                <OngoingContest key={contestInfo.contestId} contestInfo={contestInfo}></OngoingContest>)
-                    }
-                </ul>
+            <div>
+                <ContestTable contestList={ongoingContestsInfo}/>
             </div>
         )
     }

@@ -12,9 +12,8 @@ export default function SectionHeader({
 }: { 
     sectionTabs: SectionTabData[]
 }): JSX.Element { 
-    const userInfo = getUserInfo(); 
-
     const pathName = usePathname(); 
+    const userInfo = getUserInfo(); 
 
     return (
             // {/* If length is not converted to String -> lead to bug, I do not reall know why */}
