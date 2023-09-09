@@ -10,5 +10,5 @@ contestRouter.post("/contests/create", contestController.createContest);
 contestRouter.get("/contest/:contestId/", contestController.getContest); 
 contestRouter.delete("/deletecontest", contestController.deleteContest); 
 contestRouter.post("/contest/:contestId/submit", userCodeUpload, contestController.createSubmission);
-
+contestRouter.get("/contest/:contestId/submissions", contestController.getSubmissions)
 export default contestRouter; 

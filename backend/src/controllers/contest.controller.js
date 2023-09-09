@@ -125,7 +125,20 @@ async function getContestResults(req, res, next) {
     return res.status(200).send({results}); 
 }
 
-// async function rejudgeContest(req, res, next) { 
+async function getSubmissions(req, res, next) { 
+    const contestId = req.params.contestId; 
+    const includeUnofficial = req.query.includeUnofficial; 
+
+    if(includeUnofficial === undefined) { 
+        return res.status(400).send({msg: "Missing includeUnofficial"}); 
+    }
+
+    const submissions = await contestService.getSubmissionsWithUsername({contestId, includeUnofficial}); 
+
+    return res.status(200).send({submissions}); 
+}
+// 
+// async function judgeContest(req, res, next) { 
 //     const contestId = req.params.contestId; 
 //     if(!contestId) { 
 //         return res.status(400).send({msg: "Missing contest id"}); 
@@ -134,7 +147,7 @@ async function getContestResults(req, res, next) {
 //     try { 
 //         await contestService.rejudgeContest({id: contestId}); 
 //     } catch(e) { 
-
+        
 //     }
 // }
 
@@ -153,4 +166,5 @@ export {
     deleteContest, 
     createSubmission, 
     getContestResults, 
+    getSubmissions, 
 }

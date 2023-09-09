@@ -6,6 +6,7 @@ const submissionSchema = new Schema ({
     contestId: {type: Number}, 
     submissionDate: {type: Date, default: () => new Date()}, 
     language: {type: String, default: "cpp"}, 
+    official: {type: Boolean, required: true}, 
     sourceUrl: {type: String}, 
 })
 

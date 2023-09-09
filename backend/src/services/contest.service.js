@@ -4,6 +4,8 @@ import ServiceError from "./errors/serviceError.js";
 import ValidationError from "./errors/validationError.js";
 import DatabaseError from "./errors/databaseError.js";
 import UnknownInternalError from "./errors/unknownInternalError.js";
+import SubmissionModel from "../models/submission.model.js";
+import UserModel from "../models/user.model.js";
 
 async function getAllEndedUnjudgedContest() { 
     return Array.from(
@@ -168,6 +170,30 @@ async function setCurrentState(contestId, currentStateString) {
     await ContestModel.updateOne({id: contestId}, {currentState: currentStateString}); 
 }
 
+async function getSubmissionsWithUsername({contestId, includeUnofficial}) { 
+    let submissions; 
+    if(includeUnofficial === true) {
+        submissions = await SubmissionModel.find({contestId}); 
+    }
+    else { 
+        console.log("exclude unofficial: true")
+        submissions = await SubmissionModel.find({contestId, official: true}); 
+    }
+    const filteredSubmissions = await Promise.all(submissions.map(async (submission) => { 
+        // console.log(await UserModel.findOne({id: submission.userId}))
+        const username = (await UserModel.findOne({id: submission.userId})).username; 
+        // console.log(username); 
+        return { 
+            submissionId: submission.id, 
+            contestId: submission.contestId, 
+            userId: submission.userId, 
+            submissionDate: submission.submissionDate, 
+            username
+        }
+    }))
+    return filteredSubmissions; 
+}
+
 const contestService = { 
     getAllEndedUnjudgedContest, 
     getAllContests, 
@@ -181,7 +207,8 @@ const contestService = {
     getContestResults, 
     setContestResults, 
     getCurrentState, 
-    setCurrentState
+    setCurrentState, 
+    getSubmissionsWithUsername, 
 }
 
 export default contestService; 
