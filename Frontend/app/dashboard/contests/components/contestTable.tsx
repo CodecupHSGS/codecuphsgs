@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function ContestTable({contestList}: {contestList: ContestInfo[]}) { 
     return (
         <table className="w-full table-auto font-light border-2 border-gray-200">
-            <thead className="bg-gray-100 rounded-xl">
+            <thead className="bg-gray-100">
                 <tr>
                     <th className="p-4">Name</th>
                     <th className="p-4">Start</th>
@@ -12,8 +12,8 @@ export default function ContestTable({contestList}: {contestList: ContestInfo[]}
             </thead>
             <tbody>
                 {
-                    contestList.map((contest) => (
-                        <tr className=" border-gray-300 p-4 hover:shadow-md">
+                    contestList.map((contest, index) => (
+                        <tr className=" border-gray-300 p-4 hover:shadow-md" key={index}>
                             <td className="p-4">
                                 <Link href={`/dashboard/contest/${contest.contestId}`}
                                     className="text-sm underline leading-6 text-gray-900">

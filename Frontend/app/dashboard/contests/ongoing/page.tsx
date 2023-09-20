@@ -27,6 +27,10 @@ function OngoingContest({
 
 export default function OngoingContests() { 
     const contestsInfo = useContext(ContestsInfoContext)
+
+    if(contestsInfo === null) { 
+        return <>Loading...</>; 
+    }
     const ongoingContestsInfo = 
         contestsInfo
             .filter(contestsInfo => contestsInfo.startDate < new Date() && contestsInfo.endDate >= new Date())
@@ -41,7 +45,7 @@ export default function OngoingContests() {
     catch (error) { 
         console.log(contestsInfo)
         console.log(error); 
-        return <>Loading...</>; 
+        return <>Error!</>; 
     }
 }
 

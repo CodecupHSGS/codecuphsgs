@@ -43,7 +43,15 @@ interface ContestDetails {
 interface SubmissionInfo { 
     submissionId: number, 
     contestId: number, 
-    userId: number
+    userId: number, 
+    username?: number, 
+    submissionDate: Date
+}
+
+interface ContestResults { 
+    result: Object, 
+    finishedJudging: boolean, 
+    startedJudging: boolean, 
 }
 
 async function createContest(contestInfo:Object) : Promise<{
@@ -163,9 +171,10 @@ async function submitCode({
     try { 
         const submission = body.submission; 
         return { 
-            submissionId: submission.id, 
+            submissionId: submission.submissionId, 
             contestId: submission.contestId, 
-            userId: submission.userId
+            userId: submission.userId, 
+            submissionDate: submission, 
         }
     }catch(error: any) {
         console.log("Error at submitCode API: " + error); 
@@ -173,11 +182,50 @@ async function submitCode({
     }
 }
 
-async function getResult(contestId:Number) {
+async function getSubmissions({ 
+    includeUnofficial, 
+    contestId
+}: { 
+    includeUnofficial: boolean, 
+    contestId: number
+}) {
+    if(!includeUnofficial || !contestId) { 
+        throw new ValidationError("Missing parameters"); 
+    }
+
+    if(typeof includeUnofficial != "boolean" || typeof contestId != "number") { 
+        throw new ValidationError("Wrong parameter type"); 
+    }
+
+    const fetchUrl = "/api/contest/" + contestId + "/submissions?includeUnofficial=" + (includeUnofficial? "true": "false"); 
+    const response = await fetch(fetchUrl); 
+
+    const {status, body} = await validateResponse(response); 
+
+    try { 
+        const submissions: Array<any> = body.submissions; 
+        return submissions.map((submission) => { 
+            return { 
+                contestId: submission.contestId, 
+                submissionId: submission.submissionId, 
+                userId: submission.userId, 
+                username: submission.username, 
+                submissionDate: submission.submissionDate, 
+            }
+        })
+    } catch(e) { 
+        console.log("Error at fetching submissions API: " + e);
+        throw new UnknownInternalError(); 
+    }
+}
+
+
+
+async function getResult(contestId:Number): Promise<ContestResults> {
     const response = await fetch(`/api/contest/${contestId}/results`, 
     { 
         method: "GET"
-    })
+    });
     const body = await response.json(); 
     return body; 
 }
@@ -185,7 +233,8 @@ async function getResult(contestId:Number) {
 export type {  
     ContestInfo, 
     ContestDetails, 
-    SubmissionInfo
+    SubmissionInfo, 
+    ContestResults
 }
 
 export { 
@@ -195,5 +244,6 @@ export {
     getContestDetails, 
     submitCode, 
     createContest, 
-    getResult
+    getResult, 
+    getSubmissions
 }

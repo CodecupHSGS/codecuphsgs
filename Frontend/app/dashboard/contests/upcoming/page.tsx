@@ -9,7 +9,10 @@ import assert from "assert";
 import ContestTable from "../components/contestTable";
 
 export default function UpcomingContests() { 
-    const contestsInfo = useContext(ContestsInfoContext)
+    const contestsInfo = useContext(ContestsInfoContext); 
+    if(contestsInfo === null) { 
+        return <>Loading...</>; 
+    }
     const upcomingContests = contestsInfo.filter(contestsInfo => contestsInfo.startDate >= new Date())
     try {
         assert (contestsInfo != null); 

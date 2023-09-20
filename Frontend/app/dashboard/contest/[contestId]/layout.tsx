@@ -36,6 +36,11 @@ export default function ContestDetailsLayout({
             adminRequired: false, 
         }, 
         { 
+            title: "Submissions", 
+            href: path + "/submissions",
+            adminRequired: true, 
+        }, 
+        { 
             title: "Results", 
             href: path + "/results",
             adminRequired: true, 

@@ -13,7 +13,7 @@ export default function SectionTab({
     sectionTab, 
     selected, 
 }: { 
-    sectionTab: SectionTab, 
+    sectionTab: SectionTabData, 
     selected: boolean, 
 }): JSX.Element { 
     const router = useRouter(); 

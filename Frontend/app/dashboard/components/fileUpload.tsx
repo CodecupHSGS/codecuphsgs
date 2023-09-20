@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 
-export default function FileSelect({file, setFile}) { 
+export default function FileSelect({file, setFile}: {file: null | File, setFile: Function}) { 
     const [dragActive, setDragActive] = useState<boolean>(false); 
 
     // function handleDrag(event) {

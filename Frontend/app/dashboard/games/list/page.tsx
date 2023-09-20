@@ -38,8 +38,8 @@ export default function GameListPage() {
                         </thead>
                         <tbody>
                             {
-                                gameInfos.map((game) => (
-                                    <tr className=" border-gray-300 p-4 hover:shadow-md">
+                                gameInfos.map((game, index) => (
+                                    <tr className=" border-gray-300 p-4 hover:shadow-md" key={index}>
                                         <td>{game.id}</td>
                                         <td className="p-4">
                                             <Link href={`/dashboard/game/${game.id}`}
