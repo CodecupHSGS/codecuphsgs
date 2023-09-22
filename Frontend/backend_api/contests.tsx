@@ -226,8 +226,24 @@ async function getResult(contestId:Number): Promise<ContestResults> {
     { 
         method: "GET"
     });
-    const body = await response.json(); 
+    
+    const {status, body} = await validateResponse(response);
     return body; 
+}
+
+async function judgeContest({ 
+    contestId, 
+    includeUnofficial 
+}:{ 
+    contestId: number, 
+    includeUnofficial: boolean
+}) {
+    const response = await fetch(`/api/contest/${contestId}/judge?includeUnofficial=${includeUnofficial}`, 
+    { 
+        method: "GET"
+    });
+    
+    const {status, body} = await validateResponse(response); 
 }
 
 export type {  
@@ -245,5 +261,6 @@ export {
     submitCode, 
     createContest, 
     getResult, 
-    getSubmissions
+    getSubmissions, 
+    judgeContest
 }
