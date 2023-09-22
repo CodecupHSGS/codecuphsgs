@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function TimeAndDateHyperLink({
      date, 
      message
@@ -9,9 +11,10 @@ export default function TimeAndDateHyperLink({
      const dateWithOffset = new Date(date.getTime() - 60000 * date.getTimezoneOffset()); 
 
      return (
-          <a href={`https://www.timeanddate.com/countdown/generic?iso=${dateWithOffset.toISOString()}&message=${URIEncodedMessage}`}
+          <Link href={`https://www.timeanddate.com/countdown/generic?iso=${dateWithOffset.toISOString()}&message=${URIEncodedMessage}`}
+               target="_blank"
                className=" text-blue-900 underline">
                {date.toLocaleString()}
-          </a>
+          </Link>
      )
 }
