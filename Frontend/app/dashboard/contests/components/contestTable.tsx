@@ -1,5 +1,7 @@
 import { ContestInfo } from "@/backend_api/contests";
 import Link from "next/link";
+import TimeAndDateHyperLink from "@/app/utils/timeanddate/timeanddate";
+
 export default function ContestTable({contestList}: {contestList: ContestInfo[]}) { 
     return (
         <table className="w-full table-auto font-light border-2 border-gray-200">
@@ -20,8 +22,8 @@ export default function ContestTable({contestList}: {contestList: ContestInfo[]}
                                     {contest.contestName}
                                 </Link>
                             </td>
-                            <td className="p-4">{contest.startDate.toLocaleString()}</td>
-                            <td className="p-4">{contest.endDate.toLocaleString()}</td>
+                            <td className="p-4"><TimeAndDateHyperLink message={contest.contestName + " (Begin)"} date={contest.startDate}/></td>
+                            <td className="p-4"><TimeAndDateHyperLink message={contest.contestName + " (End)"} date={contest.startDate}/></td>
                         </tr>
                     ))
                 }
