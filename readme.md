@@ -40,12 +40,9 @@ password: admin
 ```
 
 <h2>Preview</h2>
+<img width="1512" alt="Screen Shot 2023-09-23 at 3 44 27 am" src="https://github.com/CodecupHSGS/codecuphsgs/assets/112223883/ceb9a388-c08a-4cf0-805e-e4a657521de2">
 
 
+<img width="1483" alt="Screen Shot 2023-09-23 at 3 42 50 am" src="https://github.com/CodecupHSGS/codecuphsgs/assets/112223883/7b5d2509-9ca2-4d42-9092-974bfe08e87e">
 
-<img width="1488" alt="Screen Shot 2023-05-27 at 11 23 18 pm" src="https://github.com/Ddoraaaaa/codecuphsgs/assets/112223883/d3930cea-0ac8-4dfe-8583-3ff24643a0a5">
-<img width="1490" alt="Screen Shot 2023-05-27 at 11 23 24 pm" src="https://github.com/Ddoraaaaa/codecuphsgs/assets/112223883/b3ca240a-8b6c-4be7-9cac-2f348ff9f656">
-<img width="1489" alt="Screen Shot 2023-05-27 at 11 24 23 pm" src="https://github.com/Ddoraaaaa/codecuphsgs/assets/112223883/529a1ce7-a73f-4f17-87b5-85187076cb5f">
-<img width="1492" alt="Screen Shot 2023-05-27 at 11 24 42 pm" src="https://github.com/Ddoraaaaa/codecuphsgs/assets/112223883/c9ca71cd-7b79-4f58-bc83-4af41814835a">
-<img width="1509" alt="Screen Shot 2023-05-27 at 11 24 52 pm" src="https://github.com/Ddoraaaaa/codecuphsgs/assets/112223883/c815b544-6edb-478f-855e-a7fb7b270313">
-<img width="1508" alt="Screen Shot 2023-05-27 at 11 25 14 pm" src="https://github.com/Ddoraaaaa/codecuphsgs/assets/112223883/40e0bcc3-b9da-4d16-9c7a-0854f1c9db28">
+<img width="1511" alt="Screen Shot 2023-09-23 at 3 43 55 am" src="https://github.com/CodecupHSGS/codecuphsgs/assets/112223883/00f2273c-d601-4048-b2f8-52e5da56444a">
