@@ -1,7 +1,7 @@
 "use client"; 
 
 import { ReactNode } from "react";
-import SectionHeader from "../../components/section_header";
+import SectionHeader from "../../components/sectionHeader";
 import { useParams } from "next/navigation";
 import SubsectionBodyContainer from "../../components/subsectionBodyContainer";
 import { getUserInfo } from "@/session_storage_api/api";

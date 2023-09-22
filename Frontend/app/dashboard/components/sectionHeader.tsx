@@ -2,8 +2,8 @@
 
 import { getUserInfo, UserInfo } from "@/session_storage_api/api";
 import hsgs_logo from "../../public/logo.png"
-import SectionTab from "./section_tab";
-import { SectionTabData } from "./section_tab";
+import SectionTab from "./sectionTab";
+import { SectionTabData } from "./sectionTab";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 
