@@ -1,10 +1,8 @@
 "use client"; 
 
 import { getUserInfo, UserInfo } from "@/session_storage_api/api";
-import hsgs_logo from "../../public/logo.png"
 import SectionTab from "./sectionTab";
 import { SectionTabData } from "./sectionTab";
-import { useState } from "react";
 import { usePathname } from "next/navigation";
 
 export default function SectionHeader({
@@ -25,7 +23,7 @@ export default function SectionHeader({
     }
     else { 
         return (
-            <div className={`h-10 w-full grid grid-cols-12 items-center bg-gray-400`}>
+            <div className={`h-10 w-full grid grid-cols-12 items-center bg-gray-200`}>
                 {
                     sectionTabs.map((sectionTab, index) => 
                         <SectionTab 
