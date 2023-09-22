@@ -73,9 +73,8 @@ export default function ContestInfoForm({callback, contestInfo}: {callback: Func
     return (
     <form>
         <div className="space-y-12">
-            <div className="border-b border-gray-900/10 pb-12">
+            <div className="border-b border-gray-900 pb-12 space-y-4">
                 <h2 className="text-base font-semibold leading-7 text-gray-900">General Information</h2>
-                <p className="mt-1 text-sm leading-6 text-gray-600"></p>
 
                 <div className="sm:col-span-3">
                     <label className="block text-sm font-medium leading-6 text-gray-900">Name</label>
@@ -132,21 +131,21 @@ export default function ContestInfoForm({callback, contestInfo}: {callback: Func
                 </div>
                 <div className="sm:col-span-3">
                     <label className="block text-sm font-medium leading-6 text-gray-900">Contest Format</label>
-                    <select name="cars" id="cars" onChange={onContestFormatSelect}>
+                    <select onChange={onContestFormatSelect}>
                         <option value='ALL_VS_ALL'>Pairwise matches</option>    
                         <option value='ROUND_16'>Round 16</option>
                     </select>
                 </div>
                 <div className="sm:col-span-3">
                     <label className="block text-sm font-medium leading-6 text-gray-900">Judge Mode</label>
-                    <select name="cars" id="cars" onChange={onJudgeModeSelect}>
+                    <select onChange={onJudgeModeSelect}>
                         <option value='MANUAL_JUDGE'>Judge manually</option>
                         <option value='AUTO_JUDGE'>Judge automatically</option>
                     </select>
                 </div>
                 <div className="sm:col-span-3">
                     <label className="block text-sm font-medium leading-6 text-gray-900">Run trial matches during the contest?</label>
-                    <select name="cars" id="cars" onChange={onTrialJudgeSelect}>
+                    <select onChange={onTrialJudgeSelect}>
                         <option value='yes'>Yes</option>
                         <option value='no'>No</option>
                     </select>
