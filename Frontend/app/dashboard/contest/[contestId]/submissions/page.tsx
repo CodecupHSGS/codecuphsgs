@@ -1,7 +1,6 @@
 "use client"; 
 
 import { SubmissionInfo, getSubmissions } from "@/backend_api/contests";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react"
 
@@ -17,7 +16,7 @@ export default function Submissions () {
 
     useEffect(() => { 
         fetchSubmissionsInfo();  
-    })
+    }, [])
 
     if(!submissionsInfo) { 
         return <>Loading...</>
