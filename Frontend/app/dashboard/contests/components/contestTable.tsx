@@ -4,7 +4,7 @@ import TimeAndDateHyperLink from "@/app/utils/timeanddate/timeanddate";
 
 export default function ContestTable({contestList}: {contestList: ContestInfo[]}) { 
     return (
-        <table className="w-full table-auto font-light border-2 border-gray-200">
+        <table className="w-full m-auto table-fixed font-light border-2 border-gray-900 rounded-lg border-separate overflow-scroll">
             <thead className="bg-gray-100">
                 <tr>
                     <th className="p-4">Name</th>
@@ -15,7 +15,7 @@ export default function ContestTable({contestList}: {contestList: ContestInfo[]}
             <tbody>
                 {
                     contestList.map((contest, index) => (
-                        <tr className=" border-gray-300 p-4 hover:shadow-md" key={index}>
+                        <tr className=" border-gray-300 p-4 hover:border-gray-500 hover:rounded-sm hover:border-2" key={index}>
                             <td className="p-4">
                                 <Link href={`/dashboard/contest/${contest.contestId}`}
                                     className="text-sm underline leading-6 text-gray-900">
