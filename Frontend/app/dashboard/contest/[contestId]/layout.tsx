@@ -1,10 +1,10 @@
 "use client"; 
 
-import { ReactNode } from "react";
+import {ReactNode, useEffect, useState } from "react";
 import SectionHeader from "../../components/sectionHeader";
 import { useParams } from "next/navigation";
 import SubsectionBodyContainer from "../../components/subsectionBodyContainer";
-import { getUserInfo } from "@/session_storage_api/api";
+import { getUserInfo, UserInfo } from "@/session_storage_api/api";
 
 
 
@@ -13,10 +13,19 @@ export default function ContestDetailsLayout({
 }: { 
     children: ReactNode
 }) { 
-    const params = useParams(); // wait is this even possible
-    // so useParams is different from useSearchParams. 
-    const path = "/dashboard/contest/" + params.contestId
-    const userInfo = getUserInfo(); 
+    const params = useParams(); // so useParams is different from useSearchParams. 
+    const [userInfo, setUserInfo] = useState<null | UserInfo>(null); 
+
+    useEffect(() => { 
+        setUserInfo(getUserInfo()); 
+    }, []); 
+
+    // During first render, the user's information is not available. 
+    if(userInfo === null) { 
+        return null; 
+    }
+
+    const path = "/dashboard/contest/" + params.contestId; 
 
     const sectionTabs = [
         { 
@@ -38,16 +47,21 @@ export default function ContestDetailsLayout({
         { 
             title: "Submissions", 
             href: path + "/submissions",
-            adminRequired: true, 
+            adminRequired: false, 
         }, 
         { 
             title: "Results", 
             href: path + "/results",
-            adminRequired: true, 
+            adminRequired: false, 
         }, 
         { 
             title: "Update", 
             href: path + "/update",
+            adminRequired: true, 
+        }, 
+        { 
+            title: "Judge", 
+            href: path + "/judge",
             adminRequired: true, 
         }
     ]; 
@@ -56,7 +70,6 @@ export default function ContestDetailsLayout({
         if(sectionTab.adminRequired && userInfo?.userIsAdmin == false) { 
             return false; 
         }
-
         return true; 
     }); 
     
