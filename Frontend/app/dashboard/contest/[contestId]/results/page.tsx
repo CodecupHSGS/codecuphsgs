@@ -1,22 +1,47 @@
 "use client"; 
 
-import { getResult } from "@/backend_api/contests";
+import { ContestResults, getResult } from "@/backend_api/contests";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import useContestDetails from "../contest_details_hook";
 
 export default function ResultPage() { 
     const params = useParams(); 
-    const [results, setResults] = useState([]); 
+    const {contestDetails, setContestId} = useContestDetails(parseInt(params.contestId)); 
+    const [results, setResults] = useState<null | ContestResults>(null); 
     
     async function callFetchContestResults() { 
-        console.log("fetching contest result")
-        const _results = await getResult(parseInt(params.contestId)); 
-        setResults(_results); 
+        const new_results = await getResult(parseInt(params.contestId)); 
+        setResults(new_results); 
     }
     useEffect( () => { 
-        console.log("running effect"); 
         callFetchContestResults();     
     }, []); 
 
-    return <>{JSON.stringify(results)}</>; 
+    if(contestDetails && contestDetails.endDate >= new Date()) { 
+        return (
+            <div>
+                This contest has not ended. &nbsp;
+            </div>
+        );
+    }
+    else if(results) { 
+        if(results.finishedJudging) { 
+            return <>{JSON.stringify(results)}</>; 
+        }
+        else if(results.startedJudging) { 
+            return (
+                <div>
+                    This contest is being judged. &nbsp;
+                </div>
+            ); 
+        }
+        else { 
+            return (
+                <div>
+                    This contest has not been judged. &nbsp;
+                </div>
+            ); 
+        }
+    }
 }

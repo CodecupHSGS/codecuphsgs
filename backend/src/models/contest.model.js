@@ -6,7 +6,7 @@ const contestSchema = new Schema({
 	id: {type: Number, required: true, unique: true},
 
     name: {type: String, required: true},
-	gameId: {type: Number}, 
+	gameId: {type: Number, required: true}, 
 	startDate: {type: Date, default: () => new Date()},
 	endDate: {type: Date, default: () => new Date()},
 
@@ -16,7 +16,8 @@ const contestSchema = new Schema({
 
 	finalSubmissions: {type: Map, of: Number, default: {}}, 
 
-	judged: {type: Boolean, default: false}, 
+	startedJudging: {type: Boolean, default: false}, 
+	finishedJudging: { type: Boolean, default: false}, 
 	currentState: {type: String, default: ""},
 	result: {type: String, default: ""}
 }, contestSchemaOptions); 

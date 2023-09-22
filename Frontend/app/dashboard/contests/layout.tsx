@@ -1,11 +1,12 @@
 "use client"; 
 
 import { ReactNode } from "react";
-import SectionHeader from "../components/section_header";
+import SectionHeader from "../components/sectionHeader";
 import { useLayoutEffect, useState } from "react";
 import { createContext } from "react";
 import { ContestInfo, getAllContests } from "@/backend_api/contests";
 import alertBackendAPIError from "@/app/utils/alertSystem/alertBackendAPIError";
+import { getUserInfo } from "@/session_storage_api/api";
 
 const sectionTabs = [
     {
@@ -41,7 +42,15 @@ export default function ContestsLayout({
     /* put the contestsInfo here to reduce the number of fetch request. 
     Persist until rerender contest page / reload */
     const [contestsInfo, setContestsInfo] = useState<ContestInfo[] | null> (null); 
+    const userInfo = getUserInfo(); 
 
+    const sectionTabsFiltered = sectionTabs.filter((sectionTab) => { 
+        if(sectionTab.adminRequired && userInfo?.userIsAdmin == false) { 
+            return false; 
+        }
+        return true; 
+    }); 
+    
     async function refetchContestsInfo() { 
         try { 
             const contestsInfo = await getAllContests(); 
@@ -63,7 +72,7 @@ export default function ContestsLayout({
     return (
         contestsInfo !== null? 
             <ContestsInfoContext.Provider value={contestsInfo}>
-                <SectionHeader sectionTabs={sectionTabs}></SectionHeader>
+                <SectionHeader sectionTabs={sectionTabsFiltered}></SectionHeader>
                 <div className="w-full text-sm p-6">{children}</div>
             </ContestsInfoContext.Provider>: 
             <div>Loading...</div>

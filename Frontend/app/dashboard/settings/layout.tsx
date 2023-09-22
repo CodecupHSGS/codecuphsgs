@@ -1,7 +1,7 @@
 "use client"; 
 
 import { ReactNode } from "react";
-import SectionHeader from "../components/section_header";
+import SectionHeader from "../components/sectionHeader";
 import SubsectionBodyContainer from "../components/subsectionBodyContainer";
 
 const sectionTabs = [

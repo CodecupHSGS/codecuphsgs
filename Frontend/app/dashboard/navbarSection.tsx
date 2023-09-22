@@ -1,8 +1,5 @@
 "use client"; 
 
-import { UserInfo } from "@/session_storage_api/api";
-import hsgs_logo from "../../public/logo.png"
-import Image from "next/image";
 import Link from "next/link";
 export default function NavBarSection({
     href, children

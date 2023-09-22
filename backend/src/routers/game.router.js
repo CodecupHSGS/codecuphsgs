@@ -6,13 +6,11 @@ import {
     getGame 
 } from "../controllers/game.controller.js"
 
+import gameFilesUpload from "../middlewares/gameJudgeUpload.js"
 const gameRouter = Router(); 
-gameRouter.use((req, res, next) => { 
-    next(); 
-})
 
 gameRouter.get("/game/:gameId", getGame); 
 gameRouter.get("/games", getAllGames); 
-gameRouter.post("/games/create", createGame); 
+gameRouter.post("/games/create", gameFilesUpload, createGame); 
 
 export default gameRouter; 

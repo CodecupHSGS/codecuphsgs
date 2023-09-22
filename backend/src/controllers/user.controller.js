@@ -46,7 +46,7 @@ async function getUser(req, res, next) {
     }
 
     if(!req.session.isAdmin && req.session.userId !== userId) { 
-        return res.status(401).send({err: "Unauthorised access"}); 
+        return res.status(403).send({err: "Unauthorised access"}); 
     }
 
     try {
@@ -59,7 +59,7 @@ async function getUser(req, res, next) {
     }
     catch(err) { 
         if(err instanceof ValidationError) { 
-            return res.status(401).send({err: err.message}); 
+            return res.status(409).send({err: err.message}); 
         }
         else { 
             console.error("Error at getUser controller: " + err); 

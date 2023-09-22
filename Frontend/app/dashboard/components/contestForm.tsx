@@ -19,6 +19,7 @@ export default function ContestInfoForm({callback, contestInfo}: {callback: Func
     const [startDate, setStartDate] = useState(contestInfo?.startDate);
     const [endDate, setEndDate] = useState(contestInfo?.endDate);
     const [contestFormat, setContestFormat] = useState(contestInfo?.contestFormat); 
+    const [gameId, setGameId] = useState(contestInfo?.gameId); 
     const [trialJudge, setTrialJudge] = useState(contestInfo?.trialJudge); 
     const [judgeMode, setJudgeMode] = useState(contestInfo?.judgeMode); 
     
@@ -55,6 +56,7 @@ export default function ContestInfoForm({callback, contestInfo}: {callback: Func
         callback({
             name, 
             overview,
+            gameId, 
             startDate, 
             endDate, 
             contestFormat,
@@ -62,13 +64,17 @@ export default function ContestInfoForm({callback, contestInfo}: {callback: Func
             trialJudge, 
         }); 
     }
+
+    function onGameIdChanged(event: FormEvent) { 
+        const target = event.target as HTMLInputElement; 
+        setGameId(parseInt(target.value))
+    }
       
     return (
     <form>
         <div className="space-y-12">
-            <div className="border-b border-gray-900/10 pb-12">
+            <div className="border-b border-gray-900 pb-12 space-y-4">
                 <h2 className="text-base font-semibold leading-7 text-gray-900">General Information</h2>
-                <p className="mt-1 text-sm leading-6 text-gray-600"></p>
 
                 <div className="sm:col-span-3">
                     <label className="block text-sm font-medium leading-6 text-gray-900">Name</label>
@@ -118,26 +124,28 @@ export default function ContestInfoForm({callback, contestInfo}: {callback: Func
                 <div className="sm:col-span-3">
                     <label  className="block text-sm font-medium leading-6 text-gray-900">Game ID</label>
                     <div className="mt-2">
-                        <input type="text" name="last-name" id="last-name" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"></input>
+                        <input type="text" onChange={onGameIdChanged} name="last-name" id="last-name" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6">
+                            {contestInfo?.gameId}
+                        </input>
                     </div>
                 </div>
                 <div className="sm:col-span-3">
                     <label className="block text-sm font-medium leading-6 text-gray-900">Contest Format</label>
-                    <select name="cars" id="cars" onChange={onContestFormatSelect}>
-                        <option value='ALL_VS_ALL'>Pairwise matches</option>
+                    <select onChange={onContestFormatSelect}>
+                        <option value='ALL_VS_ALL'>Pairwise matches</option>    
                         <option value='ROUND_16'>Round 16</option>
                     </select>
                 </div>
                 <div className="sm:col-span-3">
                     <label className="block text-sm font-medium leading-6 text-gray-900">Judge Mode</label>
-                    <select name="cars" id="cars" onChange={onJudgeModeSelect}>
+                    <select onChange={onJudgeModeSelect}>
                         <option value='MANUAL_JUDGE'>Judge manually</option>
                         <option value='AUTO_JUDGE'>Judge automatically</option>
                     </select>
                 </div>
                 <div className="sm:col-span-3">
                     <label className="block text-sm font-medium leading-6 text-gray-900">Run trial matches during the contest?</label>
-                    <select name="cars" id="cars" onChange={onTrialJudgeSelect}>
+                    <select onChange={onTrialJudgeSelect}>
                         <option value='yes'>Yes</option>
                         <option value='no'>No</option>
                     </select>
