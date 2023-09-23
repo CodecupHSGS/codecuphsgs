@@ -6,11 +6,11 @@ interface UserInfo {
     userIsAdmin: boolean; 
 }
 
-function setUserInfo(userInfo: UserInfo | null) { 
+function saveUserInfo(userInfo: UserInfo | null) { 
     sessionStorage.setItem('userInfo', JSON.stringify(userInfo)); 
 }
 
-function getUserInfo(): UserInfo | null { 
+function retrieveUserInfo(): UserInfo | null { 
     if(typeof window === "undefined" ) { 
         return null; 
     }
@@ -26,6 +26,6 @@ export type {
 }
 
 export {  
-    setUserInfo, 
-    getUserInfo
+    saveUserInfo, 
+    retrieveUserInfo
 }

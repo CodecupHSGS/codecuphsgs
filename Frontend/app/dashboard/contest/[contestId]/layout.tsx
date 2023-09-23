@@ -4,7 +4,7 @@ import {ReactNode, useEffect, useState } from "react";
 import SectionHeader from "../../components/sectionHeader";
 import { useParams } from "next/navigation";
 import SubsectionBodyContainer from "../../components/subsectionBodyContainer";
-import { getUserInfo, UserInfo } from "@/session_storage_api/api";
+import { retrieveUserInfo, UserInfo } from "@/session_storage_api/api";
 
 
 
@@ -17,7 +17,7 @@ export default function ContestDetailsLayout({
     const [userInfo, setUserInfo] = useState<null | UserInfo>(null); 
 
     useEffect(() => { 
-        setUserInfo(getUserInfo()); 
+        setUserInfo(retrieveUserInfo()); 
     }, []); 
 
     // During first render, the user's information is not available. 

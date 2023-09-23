@@ -1,7 +1,7 @@
 "use client"; 
 
 import {signup} from "../../../backend_api/users"
-import { setUserInfo } from "@/session_storage_api/api";
+import { saveUserInfo } from "@/session_storage_api/api";
 import assert from "assert";
 import {FormEvent, useState} from "react"
 import { useRouter } from "next/navigation";
@@ -39,7 +39,7 @@ export default function SignupPage() {
                 password: password
             }); 
            
-            setUserInfo(userInfo); 
+            saveUserInfo(userInfo); 
             
             router.push("/dashboard"); 
         }

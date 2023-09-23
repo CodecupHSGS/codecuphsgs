@@ -6,7 +6,7 @@ import { useLayoutEffect, useState } from "react";
 import { createContext } from "react";
 import { ContestInfo, getAllContests } from "@/backend_api/contests";
 import alertBackendAPIError from "@/app/utils/alertSystem/alertBackendAPIError";
-import { getUserInfo } from "@/session_storage_api/api";
+import { retrieveUserInfo } from "@/session_storage_api/api";
 
 const sectionTabs = [
     {
@@ -42,7 +42,7 @@ export default function ContestsLayout({
     /* put the contestsInfo here to reduce the number of fetch request. 
     Persist until rerender contest page / reload */
     const [contestsInfo, setContestsInfo] = useState<ContestInfo[] | null> (null); 
-    const userInfo = getUserInfo(); 
+    const userInfo = retrieveUserInfo(); 
 
     const sectionTabsFiltered = sectionTabs.filter((sectionTab) => { 
         if(sectionTab.adminRequired && userInfo?.userIsAdmin == false) { 

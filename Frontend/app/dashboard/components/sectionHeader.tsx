@@ -1,6 +1,6 @@
 "use client"; 
 
-import { getUserInfo, UserInfo } from "@/session_storage_api/api";
+import { retrieveUserInfo, UserInfo } from "@/session_storage_api/api";
 import SectionTab from "./sectionTab";
 import { SectionTabData } from "./sectionTab";
 import { usePathname } from "next/navigation";
@@ -11,7 +11,7 @@ export default function SectionHeader({
     sectionTabs: SectionTabData[]
 }): JSX.Element | null { 
     const pathName = usePathname(); 
-    const userInfo = getUserInfo(); 
+    const userInfo = retrieveUserInfo(); 
 
     // Find the current section based on the current URL. 
     const currentSectionTab = sectionTabs.find(sectionTab => sectionTab.href === pathName); 

@@ -22,7 +22,7 @@
 //     static userInfo: UserInfo | null; 
 //     static setUserInfo: Dispatch<SetStateAction<UserInfo | null>>
 
-//     static getUserInfo(): UserInfo | null { 
+//     static retrieveUserInfo(): UserInfo | null { 
 //         let userInfoString = sessionStorage.getItem('userInfo'); 
 //         if(userInfoString == null) { 
 //             return null; 
@@ -36,7 +36,7 @@
 //         }
 //         SharedUserInfoHook.instance = this; 
 //         [SharedUserInfoHook.userInfo, SharedUserInfoHook.setUserInfo] 
-//             = useState<UserInfo | null>(SharedUserInfoHook.getUserInfo()); 
+//             = useState<UserInfo | null>(SharedUserInfoHook.retrieveUserInfo()); 
 //     }
 
 //     static saveUserInfo(userInfo: UserInfo | null) { 

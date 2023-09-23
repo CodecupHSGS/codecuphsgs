@@ -2,7 +2,7 @@
 
 import { ReactNode } from "react";
 import SectionHeader from "../components/sectionHeader";
-import { getUserInfo } from "@/session_storage_api/api";
+import { retrieveUserInfo } from "@/session_storage_api/api";
 
 const sectionTabs = [
     {
@@ -26,7 +26,7 @@ export default function GamesLayout({
     Persist until rerender contest page / reload */
     // for ... in iterates through the keys, not the values
 
-    const userInfo = getUserInfo(); 
+    const userInfo = retrieveUserInfo(); 
 
     const sectionTabsFiltered = sectionTabs.filter((sectionTab) => { 
         if(sectionTab.adminRequired && userInfo?.userIsAdmin == false) { 

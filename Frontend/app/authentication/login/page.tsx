@@ -1,6 +1,6 @@
 "use client"; 
 
-import { setUserInfo } from "@/session_storage_api/api";
+import { saveUserInfo } from "@/session_storage_api/api";
 import {login} from "../../../backend_api/users"
 import Link from "next/link";
 import {FormEvent, useState} from "react"
@@ -38,7 +38,7 @@ export default function LoginPage() {
                 password
             }); 
                 
-            setUserInfo(userInfo); 
+            saveUserInfo(userInfo); 
             
             router.push("/dashboard"); 
         }

@@ -1,5 +1,5 @@
 
-import { getUserInfo } from "@/session_storage_api/api"
+import { retrieveUserInfo } from "@/session_storage_api/api"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
