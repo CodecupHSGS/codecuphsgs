@@ -8,33 +8,34 @@ import { useRouter } from "next/navigation";
 import alertBackendAPIError from "@/app/utils/alertSystem/alertBackendAPIError";
 
 export default function LoginPage() { 
-    let [username, setUsername] = useState<null | string>(null); 
-    let [password, setPassword] = useState<null | string>(null); 
-    let [email, setEmail] = useState<null | string>(null); 
+    const [username, setUsername] = useState<null | string>(null); 
+    const [password, setPassword] = useState<null | string>(null); 
+    const [email, setEmail] = useState<null | string>(null); 
     const router = useRouter(); 
 
-    async function updateUsername(event: FormEvent) { 
+    function updateUsername(event: FormEvent) { 
         const target = event.target as HTMLInputElement; 
-        await setUsername(target.value); 
+        setUsername(target.value); 
     }
-    async function updatePassword(event: FormEvent) { 
+    
+    function updatePassword(event: FormEvent) { 
         const target = event.target as HTMLInputElement;
-        await setPassword(target.value); 
+        setPassword(target.value); 
     }
 
-    async function updateEmail(event: FormEvent) { 
+    function updateEmail(event: FormEvent) { 
         const target = event.target as HTMLInputElement;
-        await setEmail(target.value); 
+        setEmail(target.value); 
     }
 
     async function handleSubmitButtonClicked(event: FormEvent) { 
         event.preventDefault();
 
         try { 
-            let userInfo = await login({
-                username: username, 
-                email: email, 
-                password: password
+            const userInfo = await login({
+                username, 
+                email, 
+                password
             }); 
                 
             setUserInfo(userInfo); 
