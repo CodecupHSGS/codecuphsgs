@@ -15,11 +15,6 @@ const contestSchema = new Schema({
     contestFormat: {type: String, enum: ['round-16', 'all-vs-all'], default: 'all-vs-all'} ,
 
 	finalSubmissions: {type: Map, of: Number, default: {}}, 
-
-	startedJudging: {type: Boolean, default: false}, 
-	finishedJudging: { type: Boolean, default: false}, 
-	currentState: {type: String, default: ""},
-	result: {type: String, default: ""}
 }, contestSchemaOptions); 
 
 const  ContestModel = model('Contest', contestSchema)
