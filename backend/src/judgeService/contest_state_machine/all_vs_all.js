@@ -72,8 +72,9 @@ export default class AllVsAllStateMachine {
 
             const runDocument = await RunModel.create({
                 id: this.#runId, 
+                startDate: new Date(), 
                 contestId: this.#contestOptions.contestId, 
-                official: this.#contestOptions.includeUnofficial === false
+                includeUnofficial: this.#contestOptions.includeUnofficial
             })
 
             console.log("Created new run in database"); 
@@ -83,7 +84,15 @@ export default class AllVsAllStateMachine {
 
             // Initalize cache and result and save in the database
             this.#cache = {}; 
-            this.#cache.finalSubmissions = contestDocument.finalSubmissions; 
+
+            // Get the final submissions from users. 
+            if(this.#contestOptions.includeUnofficial) { 
+                this.#cache.finalSubmissions = contestDocument.finalSubmissions; 
+            }
+            else { 
+                this.#cache.finalSubmissions = contestDocument.finalOfficialSubmissions; 
+            }
+
             console.log("List of final Submissions: ", this.#cache.finalSubmissions); 
             this.#cache.matchResults = {}; 
             this.#results = {}; 
@@ -201,6 +210,12 @@ export default class AllVsAllStateMachine {
      * Final clean up after running
      */
     async cleanUp() { 
-        await this.#updateDocument(); 
+        await RunModel.findOneAndUpdate({
+            id: this.#runId
+        }, { 
+            endDate: new Date(), 
+            cache: JSON.stringify(this.#cache), 
+            results: JSON.stringify(this.#results), 
+        }); 
     }
 }
