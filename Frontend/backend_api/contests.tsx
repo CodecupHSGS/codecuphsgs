@@ -49,7 +49,7 @@ interface SubmissionInfo {
 }
 
 interface ContestResults { 
-    result: Object, 
+    results: Object, 
     finishedJudging: boolean, 
     startedJudging: boolean, 
 }
@@ -228,7 +228,7 @@ async function getResult(contestId:Number, includeUnofficial:boolean): Promise<C
     });
     
     const {status, body} = await validateResponse(response);
-    return body; 
+    return body.results; 
 }
 
 async function judgeContest({ 

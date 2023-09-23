@@ -8,13 +8,13 @@ import useContestDetails from "../contest_details_hook";
 export default function ResultPage() { 
     const params = useParams(); 
     const {contestDetails, setContestId} = useContestDetails(parseInt(params.contestId)); 
-    const [results, setResults] = useState<null | ContestResults>(null); 
+    const [contestResults, setcontestResults] = useState<null | ContestResults>(null); 
     
     const includeUnofficial = true; 
 
     async function callFetchContestResults() { 
         const new_results = await getResult(parseInt(params.contestId), includeUnofficial); 
-        setResults(new_results); 
+        setcontestResults(new_results); 
     }
     useEffect( () => { 
         callFetchContestResults();     
@@ -27,14 +27,15 @@ export default function ResultPage() {
             </div>
         );
     }
-    else if (results === null) { 
+    else if (contestResults === null) { 
         return null; 
     }
     else { 
-        if(results.finishedJudging) { 
-            return <>{JSON.stringify(results)}</>; 
+        console.log(contestResults.results); 
+        if(contestResults.finishedJudging) { 
+            return <>{JSON.stringify(contestResults.results)}</>; 
         }
-        else if(results.startedJudging) { 
+        else if(contestResults.startedJudging) { 
             return (
                 <div>
                     This contest is being judged. &nbsp;
