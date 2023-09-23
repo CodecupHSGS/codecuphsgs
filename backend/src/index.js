@@ -11,9 +11,9 @@ mongoose.set('strictQuery', true);
 mongoose.connect(process.env.MONGODB_URI)
 
 import app from "./server/index.js";
-import contestPostEndingProcessor from "./worker/index.js";
+// import contestPostEndingProcessor from "./worker/index.js";
 
-contestPostEndingProcessor.start(); 
+// contestPostEndingProcessor.start(); 
 
 // START LISTENING
 const server = app.listen(5000, () => { 
@@ -21,8 +21,8 @@ const server = app.listen(5000, () => {
 })
 
 // tests
-import judgeAPIWrapper from "./worker/judgeAPIWrapper.js";
+// import judgeAPIWrapper from "./worker/judgeAPIWrapper.js";
 
-judgeAPIWrapper.on("ready", () => { 
-    judgeAPIWrapper.submit(13, 13); 
-}); 
+// judgeAPIWrapper.on("ready", () => { 
+//     judgeAPIWrapper.submit(13, 13); 
+// }); 

@@ -1,7 +1,4 @@
 'use strict';
-import EndedContestProcessor from "./ended_contest_processor.js";
-import contestService from "../services/contest.service.js";
-import stateMachineFactory from "./contest_state_machine/factory.js";
 // import 
 
 const TIME_DELTA = 10;

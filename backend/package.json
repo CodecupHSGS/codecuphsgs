@@ -12,6 +12,7 @@
     "build": "npm i",
     "dev": "cross-env NODE_ENV=dev nodemon --exec babel-node ./src/index.js",
     "test": "cross-env NODE_ENV=test jest --detectOpenHandles --testTimeout=5000",
+    "test_judgeService": "cross-env NODE_ENV=test jest --detectOpenHandles --testTimeout=30000 -t \"judgeService\" > test_log.txt", 
     "start": "cross-env NODE_ENV=prod babel-node ./src/index.js"
   },
   "keywords": [],

@@ -137,19 +137,28 @@ async function getSubmissions(req, res, next) {
 
     return res.status(200).send({submissions}); 
 }
-// 
-// async function judgeContest(req, res, next) { 
-//     const contestId = req.params.contestId; 
-//     if(!contestId) { 
-//         return res.status(400).send({msg: "Missing contest id"}); 
-//     }
 
-//     try { 
-//         await contestService.rejudgeContest({id: contestId}); 
-//     } catch(e) { 
-        
-//     }
-// }
+async function judgeContest(req, res, next) { 
+    const contestId = req.params.contestId; 
+    const includeUnofficial = req.query.includeUnofficial; 
+
+    if(contestId === null || contestId === undefined) { 
+        return res.status(400).send({msg: "Missing contest id"}); 
+    }
+
+    if(includeUnofficial === null || includeUnofficial === undefined) { 
+        return res.status(400).send({msg: "Missing includeUnofficial"}); 
+    }
+
+    try { 
+        await contestService.judgeContest({
+            id: contestId, 
+            includeUnofficial: includeUnofficial === "true"
+        }); 
+    } catch(e) { 
+        return res.status(500).send({msg: "Internal Server Error"}); 
+    }
+}
 
 function restrictedView(contest) { 
     return contest; 
@@ -167,4 +176,5 @@ export {
     createSubmission, 
     getContestResults, 
     getSubmissions, 
+    judgeContest, 
 }

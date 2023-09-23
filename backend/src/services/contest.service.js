@@ -172,11 +172,10 @@ async function setCurrentState(contestId, currentStateString) {
 
 async function getSubmissionsWithUsername({contestId, includeUnofficial}) { 
     let submissions; 
-    if(includeUnofficial === true) {
+    if(includeUnofficial === "true") {
         submissions = await SubmissionModel.find({contestId}); 
     }
     else { 
-        console.log("exclude unofficial: true")
         submissions = await SubmissionModel.find({contestId, official: true}); 
     }
     const filteredSubmissions = await Promise.all(submissions.map(async (submission) => { 
@@ -194,6 +193,29 @@ async function getSubmissionsWithUsername({contestId, includeUnofficial}) {
     return filteredSubmissions; 
 }
 
+async function judgeContest({ 
+    id, 
+    includeUnofficial
+}) { 
+    if(isNaN(id)) { 
+        throw new ServiceError("Contest Id is not a number"); 
+    }
+    if(typeof includeUnofficial != "boolean") {
+        throw new ServiceError("includeUnofficial is not a boolean"); 
+    }
+
+    const contestDocument = await ContestModel.findOne({id}); 
+    if(!contestDocument) { 
+        throw new ValidationError("Contest not found"); 
+    }
+
+    contestDocument.startedJudging = true; 
+    contestDocument.finishedJudging = false; 
+    contestDocument.save();
+    await judgeContest(contestDocument.contestId); 
+    
+}
+
 const contestService = { 
     getAllEndedUnjudgedContest, 
     getAllContests, 
@@ -209,6 +231,7 @@ const contestService = {
     getCurrentState, 
     setCurrentState, 
     getSubmissionsWithUsername, 
+    judgeContest, 
 }
 
 export default contestService; 

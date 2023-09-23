@@ -34,7 +34,7 @@ async function createSubmission({contestId, userId, sourceUrl}) {
         return submissionDocument.toObject();  
     } 
     catch(err) { 
-        console.err("Error at createSubmissionService: " + err); 
+        ("Error at createSubmissionService: " + err); 
 
         // if(err instanceof MongooseError) { 
         //     throw new DatabaseError("Database error"); 
