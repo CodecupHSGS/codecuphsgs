@@ -1,6 +1,6 @@
 'use strict'; 
 
-import judgeAPIWrapper from "./judgeAPIWrapper.js";
+import submitService from "./submitService.js";
 
 export default class EndedContestProcessor { 
     /**
@@ -62,7 +62,7 @@ export default class EndedContestProcessor {
     async #submit(judgeUrl, sourceUrl1, sourceUrl2, handleResult) { 
         // Hold until there is result for the match. In the mean time, the main loop can fetching new matches
         // from the state machine
-        const result = await judgeAPIWrapper.submit(judgeUrl, sourceUrl1, sourceUrl2);
+        const result = await submitService.submit(judgeUrl, sourceUrl1, sourceUrl2);
 
         // After the result came back, wait for the state machine to handle this result. 
         await handleResult(result); 

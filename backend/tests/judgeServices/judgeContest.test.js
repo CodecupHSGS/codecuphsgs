@@ -2,7 +2,6 @@ import "./dotenv.js";
 console.log(process.env["JUDGE_URL"])
 import mongoose from "mongoose";
 import judgeContest from "../../src/judgeService/judgeContest";
-import judgeAPIWrapper from "../../src/judgeService/judgeAPIWrapper.js";
 
 describe("testing judgeService API", () => {
 
@@ -12,12 +11,19 @@ describe("testing judgeService API", () => {
         await mongoose.connect('mongodb+srv://codecuphsgs:ec7BsleaV4AnrEnQ@cluster0.vxmdbjv.mongodb.net/codecuphsgs_dev');
     })
 
+    // it("Test API", async () => { 
+    //     await judgeContest({
+    //         contestId: 4, 
+    //         includeUnofficial: true, 
+    //     })
+    // })
+
     it("Test API", async () => { 
         await judgeContest({
             contestId: 4, 
-            includeUnofficial: true, 
+            includeUnofficial: false, 
         })
-    }, 200000)
+    })
 
     afterAll(async() => { 
         try {
@@ -25,6 +31,6 @@ describe("testing judgeService API", () => {
         } catch(e) { 
             console.error(e); 
         }
-        await judgeAPIWrapper.close(); 
+        // await judgeAPIWrapper.close(); 
     })
 }); 

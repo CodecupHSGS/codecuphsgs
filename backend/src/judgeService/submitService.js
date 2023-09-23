@@ -5,6 +5,7 @@ import {Server} from "socket.io";
 import EventEmitter from "events";
 import assert from "assert";
 import { response } from "express";
+import { resolve } from "path";
 
 const JUDGE_URL = process.env.JUDGE_URL; 
 const WORKER_PORT = process.env.WORKER_PORT; 
@@ -62,8 +63,27 @@ class Locker {
     }
 };
 
-const locker = new Locker(); 
+const locker = new Locker();
+
+// Promises that are blocked until a new socket client is added 
+const blockedPromisesResolvers = []; 
+
+// Socket Clients connecting this socket server
 const sockets = []; 
+
+async function blockUntilJudgeConnected() { 
+    if(sockets.length > 0) { 
+        return; 
+    }
+
+    // No socket clients are currently connected
+    console.log("No socket clients are currently connected. A submission is blocked"); 
+    const promise = new Promise((resolve) => { 
+        blockedPromisesResolvers.push(resolve); 
+    }); 
+
+    await promise; 
+}
 
 /**
  * Function to handle a new conection (from the judge)
@@ -81,14 +101,20 @@ function handleNewSocketConnection(socket) {
 
     sockets.push(socket); 
 
-    // Notify the judge server that setting up for this connection is complete
-    judgeAPIWrapper.emit("ready"); 
+    // Unblock the submissions that are currently blocked 
+    for(const resolve of blockedPromisesResolvers) { 
+        resolve(); 
+    }
+    // clear the list of resolvers. 
+    blockedPromisesResolvers.splice(0, blockedPromisesResolvers.length); 
 }
 
 /**
  * Function to send a match to the judge and wait for the result
  */
 async function submit(judgeUrl, sourceUrl1, sourceUrl2) { 
+    await blockUntilJudgeConnected(); 
+
     const judgeReceiptId = await sendFiles(judgeUrl, sourceUrl1, sourceUrl2);
     
     if(!judgeReceiptId) { 
@@ -275,11 +301,12 @@ io.on('listening', notifyJudgeServer);
 // Handle new connection from judge
 io.on("connection", handleNewSocketConnection)
 
-const judgeAPIWrapper = new EventEmitter(); 
+const submitService = { 
+    submit
+}
 
-judgeAPIWrapper.submit = submit; 
-judgeAPIWrapper.close = async () => { 
+submitService.close = async () => { 
     await io.disconnect(); 
 }
 
-export default judgeAPIWrapper; 
+export default submitService; 
