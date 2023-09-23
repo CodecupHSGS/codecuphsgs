@@ -20,12 +20,12 @@ export default function alertBackendAPIError(error: any, location: string) {
             }
         }
         else if(error instanceof ValidationError) { 
-            console.error("Validation error at handleSubmitButtonBlicked: " + error); 
+            console.error(`Validation error at : ${location}` + error); 
             alert("Internal error"); 
         }
         else { 
             // wth
-            console.error("Unknown APIError encountered: " + error); 
+            console.error(`Unknown API error at : ${location}` + error); 
             alert("Intenal error"); 
         }
     }

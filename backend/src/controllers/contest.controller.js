@@ -98,6 +98,11 @@ async function createSubmission(req, res, next) {
         return res.status(500).send({msg: "Internal Server Error"}); 
     }
 
+    // Admins cannot submit officially. 
+    if(req.query.isOfficial !== "false" && user.isAdmin) { 
+        return res.status(409).send({msg: "Admins cannot submit officially"}); 
+    }
+
     const contestId = parseInt(req.params.contestId); 
     const sourceUrl = req.file.path; 
 
@@ -116,12 +121,18 @@ async function createSubmission(req, res, next) {
 }
 
 async function getContestResults(req, res, next) { 
-    const contestId = req.params.contestId; 
-    if(!contestId) { 
+    if(req.params.contestId === undefined) { 
         return res.status(400).send({msg: "Missing contest id"}); 
     }
+    if(req.query.includeUnofficial !== "true"
+            && req.query.includeUnofficial !== "false") { 
+        return res.status(400).send({msg: "Wrong includeUnofficial value"}); 
+    }
 
-    const results = await contestService.getContestResults(contestId); 
+    const contestId = req.params.contestId; 
+    const includeUnofficial = req.query.includeUnofficial === "true"; 
+
+    const results = await contestService.getContestResults({contestId, includeUnofficial}); 
     return res.status(200).send({results}); 
 }
 
