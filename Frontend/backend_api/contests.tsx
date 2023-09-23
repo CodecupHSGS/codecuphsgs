@@ -221,8 +221,8 @@ async function getSubmissions({
 
 
 
-async function getResult(contestId:Number): Promise<ContestResults> {
-    const response = await fetch(`/api/contest/${contestId}/results`, 
+async function getResult(contestId:Number, includeUnofficial:boolean): Promise<ContestResults> {
+    const response = await fetch(`/api/contest/${contestId}/results?includeUnofficial=${includeUnofficial}`, 
     { 
         method: "GET"
     });

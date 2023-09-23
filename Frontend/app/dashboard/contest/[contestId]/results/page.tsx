@@ -10,8 +10,10 @@ export default function ResultPage() {
     const {contestDetails, setContestId} = useContestDetails(parseInt(params.contestId)); 
     const [results, setResults] = useState<null | ContestResults>(null); 
     
+    const includeUnofficial = true; 
+
     async function callFetchContestResults() { 
-        const new_results = await getResult(parseInt(params.contestId)); 
+        const new_results = await getResult(parseInt(params.contestId), includeUnofficial); 
         setResults(new_results); 
     }
     useEffect( () => { 
@@ -25,7 +27,10 @@ export default function ResultPage() {
             </div>
         );
     }
-    else if(results) { 
+    else if (results === null) { 
+        return null; 
+    }
+    else { 
         if(results.finishedJudging) { 
             return <>{JSON.stringify(results)}</>; 
         }
