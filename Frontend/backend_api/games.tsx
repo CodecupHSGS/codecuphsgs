@@ -7,7 +7,8 @@ interface GameInfo {
     id: number, 
     name: string, 
     statementUrl: string, 
-    renderUrl: string
+    renderUrl: string, 
+    createdDate: Date
 }
 
 async function createGame({
@@ -17,28 +18,27 @@ async function createGame({
     judgeFile
 }: { 
     name: string, 
-    statementFile:File, 
-    renderFile: File, 
+    statementFile: File | null, 
+    renderFile: File | null, 
     judgeFile: File
 }) {
-    if(!statementFile || !renderFile || !judgeFile) { 
-        throw new ValidationError("Missing files"); 
+    if(typeof name !== "string") { 
+        throw new ValidationError("name is not of type string"); 
+    }
+    if(!judgeFile) { 
+        throw new ValidationError("Missing judge file"); 
     }
 
     const formData = new FormData(); 
 
     formData.append('name', name); 
-    formData.append('statementFile', statementFile); 
-    formData.append('renderFile', renderFile); 
+    if(statementFile !== null) formData.append('statementFile', statementFile); 
+    if(renderFile !== null) formData.append('renderFile', renderFile); 
     formData.append('judgeFile', judgeFile); 
     
     const response = await fetch("/api/games/create", 
         { 
             method: "POST", 
-            // headers: {
-            //     'Content-Type': 'multipart/form-data'
-            // }, 
-            // FOR SOME REASON, ONLY WORKS IF I REMOVE content-type
             body: formData
         }
     ); 
@@ -61,10 +61,11 @@ async function getGameInfo(
     try { 
         const game = body.game; 
         return {
-                id: game.id, 
-                name: game.name, 
-                statementUrl: game.statementUrl, 
-                renderUrl: game.renderUrl
+            id: game.id, 
+            name: game.name, 
+            statementUrl: game.statementUrl, 
+            renderUrl: game.renderUrl, 
+            createdDate: new Date(game.createdDate)
         }
     } 
     catch(error: any) {
@@ -89,7 +90,8 @@ async function getAllGamesInfo(): Promise<Array<GameInfo>>{
                 ...(game.judgeUrl != undefined && {
                     judgeUrl: game.judgeUrl
                 }), 
-                renderUrl: game.renderUrl
+                renderUrl: game.renderUrl, 
+                createdDate: new Date(game.createdDate)
             }
         });
     } catch(error: any) { 

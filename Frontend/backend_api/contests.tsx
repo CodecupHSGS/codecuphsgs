@@ -46,6 +46,7 @@ interface SubmissionInfo {
     userId: number, 
     username?: number, 
     submissionDate: Date
+    isOfficial: boolean
 }
 
 interface ContestResults { 
@@ -175,6 +176,7 @@ async function submitCode({
             contestId: submission.contestId, 
             userId: submission.userId, 
             submissionDate: submission, 
+            isOfficial: submission.isOfficial
         }
     }catch(error: any) {
         console.log("Error at submitCode API: " + error); 
@@ -210,7 +212,8 @@ async function getSubmissions({
                 submissionId: submission.submissionId, 
                 userId: submission.userId, 
                 username: submission.username, 
-                submissionDate: submission.submissionDate, 
+                isOfficial: submission.isOfficial, 
+                submissionDate: new Date(submission.submissionDate), 
             }
         })
     } catch(e) { 

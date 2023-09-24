@@ -43,7 +43,7 @@ export default function JudgePage() {
                 <h2 className="text-base font-semibold leading-7 text-gray-900">Setting</h2>
                 <div>
                     <label className="block text-sm font-medium leading-6 text-gray-900">
-                        Include unofficial submissions?
+                        Include unofficial submissions
                     </label>
                     <select onChange={onIncludeUnofficialOptionSelected}>
                         <option>Yes</option>
