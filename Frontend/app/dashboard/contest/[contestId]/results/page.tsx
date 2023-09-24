@@ -1,13 +1,13 @@
 "use client"; 
 
 import { ContestResults, getResult } from "@/backend_api/contests";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import useContestDetails from "../contest_details_hook";
+import { contestDetailsContext } from "../layout";
 
 export default function ResultPage() { 
     const params = useParams(); 
-    const {contestDetails, setContestId} = useContestDetails(parseInt(params.contestId)); 
+    const contestDetails = useContext(contestDetailsContext);  
     const [contestResults, setcontestResults] = useState<null | ContestResults>(null); 
     
     const includeUnofficial = true; 

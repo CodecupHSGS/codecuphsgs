@@ -1,12 +1,14 @@
 "use client"; 
 
-import {ReactNode, useEffect, useState } from "react";
+import {ReactNode, createContext, useEffect, useState, useContext} from "react";
 import SectionHeader from "../../utils/sectionHeader";
 import { useParams } from "next/navigation";
 import SubsectionBodyContainer from "../../utils/subsectionBodyContainer";
 import { retrieveUserInfo, UserInfo } from "@/session_storage_api/api";
+import { ContestDetails, getContestDetails } from "@/backend_api/contests";
+import { userInfoContext } from "../../layout";
 
-
+const contestDetailsContext = createContext<null | ContestDetails>(null); 
 
 export default function ContestDetailsLayout({
     children
@@ -14,16 +16,24 @@ export default function ContestDetailsLayout({
     children: ReactNode
 }) { 
     const params = useParams(); // so useParams is different from useSearchParams. 
-    const [userInfo, setUserInfo] = useState<null | UserInfo>(null); 
+    const userInfo = useContext(userInfoContext); 
 
+    const [contestDetails, setContestDetails] = useState<null | ContestDetails>(null); 
+
+    async function fetchAndSetContestDetails() {
+        setContestDetails(await getContestDetails(parseInt(params.contestId))); 
+        console.log("setting context lmao");
+    }
+
+    // After first render
     useEffect(() => { 
-        setUserInfo(retrieveUserInfo()); 
+        fetchAndSetContestDetails(); 
     }, []); 
 
-    // During first render, the user's information is not available. 
-    if(userInfo === null) { 
-        return null; 
-    }
+    // // During first render, the user's information is not available. 
+    // if(userInfo === null) { 
+    //     return null; 
+    // }
 
     const path = "/dashboard/contest/" + params.contestId; 
 
@@ -75,8 +85,14 @@ export default function ContestDetailsLayout({
 
     return (
         <div className="w-full">
-            <SectionHeader sectionTabs={sectionTabsFiltered}></SectionHeader>
-            <SubsectionBodyContainer>{children}</SubsectionBodyContainer>
+            <contestDetailsContext.Provider value={contestDetails}>
+                <SectionHeader sectionTabs={sectionTabsFiltered}></SectionHeader>
+                <SubsectionBodyContainer>{children}</SubsectionBodyContainer>
+            </contestDetailsContext.Provider>
         </div>
     )
+}
+
+export { 
+    contestDetailsContext
 }

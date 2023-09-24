@@ -13,13 +13,13 @@ function saveUserInfo(userInfo: UserInfo | null) {
  * Return empty object if there is currently no user info
  * Otherwise, return user info
  **/
-function retrieveUserInfo(): UserInfo | null | {} { 
+function retrieveUserInfo(): UserInfo | null { 
     if(typeof window === "undefined" ) { 
         return null; 
     }
     let userInfoString = sessionStorage.getItem('userInfo'); 
     if(userInfoString === null || userInfoString === undefined || userInfoString.length === 0) { 
-        return {}; 
+        return {} as UserInfo; 
     }
     return JSON.parse(userInfoString); 
 }

@@ -1,11 +1,12 @@
 "use client"; 
 
 import { useParams } from "next/navigation";
-import useContestDetails from "../contest_details_hook"
+import { contestDetailsContext } from "../layout";
+import { useContext } from "react";
 
 export default function ContestStatement() { 
     const params = useParams(); 
-    const {contestDetails, setContestId} = useContestDetails(parseInt(params.contestId)); 
+    const contestDetails = useContext(contestDetailsContext); 
 
     return <div className="">You can read the statement <a className="underline" href={contestDetails?.gameStatementUrl}>here</a></div>
 }
