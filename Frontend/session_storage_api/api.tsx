@@ -1,5 +1,3 @@
-import { ContestDetails, ContestInfo } from "@/backend_api/contests";
-
 interface UserInfo { 
     userId: number, 
     username: string, 
@@ -10,13 +8,18 @@ function saveUserInfo(userInfo: UserInfo | null) {
     sessionStorage.setItem('userInfo', JSON.stringify(userInfo)); 
 }
 
-function retrieveUserInfo(): UserInfo | null { 
+/**
+ * Return null if server-side renderin
+ * Return empty object if there is currently no user info
+ * Otherwise, return user info
+ **/
+function retrieveUserInfo(): UserInfo | null | {} { 
     if(typeof window === "undefined" ) { 
         return null; 
     }
     let userInfoString = sessionStorage.getItem('userInfo'); 
     if(userInfoString === null || userInfoString === undefined || userInfoString.length === 0) { 
-        return null; 
+        return {}; 
     }
     return JSON.parse(userInfoString); 
 }
