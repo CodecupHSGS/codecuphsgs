@@ -7,13 +7,14 @@ const contestSchema = new Schema({
 
     name: {type: String, required: true},
 	gameId: {type: Number, required: true}, 
-	startDate: {type: Date, default: () => new Date()},
-	endDate: {type: Date, default: () => new Date()},
+	startDate: {type: Date, required: true},
+	endDate: {type: Date, required: true},
 
 	runTrialMatches: {type: Boolean, default: true}, 
     judgeMode: {type: String, enum: ['manual-judge', 'auto-judge'], default: 'auto-judge'}, 
     contestFormat: {type: String, enum: ['round-16', 'all-vs-all'], default: 'all-vs-all'} ,
 
+	finalOfficialSubmissions: {type: Map, of: Number, default: {}}, 
 	finalSubmissions: {type: Map, of: Number, default: {}}, 
 }, contestSchemaOptions); 
 
