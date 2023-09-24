@@ -1,15 +1,19 @@
 import { FormEvent } from "react";
 
-export default function LoginForm({
+export default function UserInfoForm({
+    title, 
     onUsernameChanged, 
     onPasswordChanged, 
     onEmailChanged, 
-    onSubmit
+    onSubmit, 
+    action
 }: { 
+    title: string, 
     onUsernameChanged: (value: string) => void, 
     onPasswordChanged: (value: string) => void, 
     onEmailChanged: (value: string) => void, 
     onSubmit: () => void
+    action: string 
 }) { 
     function onUsernameInputChanged(event: FormEvent) { 
         const target = event.target as HTMLInputElement; 
@@ -35,7 +39,7 @@ export default function LoginForm({
     return (
         <div className="w-full h-full flex-col justify-center">
             <div className="text-center">
-                <h2 className="text-3xl font-bold text-gray-900">Login</h2>
+                <h2 className="text-3xl font-bold text-gray-900">{title}</h2>
             </div>
             <form className="mt-4">
                 <div className="grid grid-cols-1 gap-y-4">
@@ -72,7 +76,7 @@ export default function LoginForm({
                     <div className="mt-2.5">
                         <button type="submit" onClick={onSubmitButtonClicked} 
                             className="block w-full rounded-md bg-gray-700 px-3.5 py-2.5 text-center text-sm font-semibold text-white hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
-                            Login
+                            {action}
                         </button>
                     </div>
                 </div>
