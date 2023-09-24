@@ -4,7 +4,7 @@ import { FormEvent, useState } from "react"
 import { useParams,useRouter} from "next/navigation";
 import { submitCode } from "@/backend_api/contests";
 import alertBackendAPIError from "@/app/utils/alertSystem/alertBackendAPIError";
-import FileSelect from "@/app/dashboard/components/fileUpload";
+import FileSelect from "@/app/dashboard/utils/fileUpload";
 export default function SubmitPage() { 
     const [file, setFile] = useState<File | null>(null); 
     const router = useRouter(); 

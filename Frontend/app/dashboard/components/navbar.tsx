@@ -1,7 +1,7 @@
 "use client"; 
 
 import { UserInfo } from "@/session_storage_api/api";
-import hsgs_logo from "../../public/logo.png"
+import hsgs_logo from "../../../public/logo.png"
 import Image from "next/image";
 import Link from "next/link";
 import NavBarSection from "./navbarSection";

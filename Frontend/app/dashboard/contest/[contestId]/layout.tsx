@@ -1,9 +1,9 @@
 "use client"; 
 
 import {ReactNode, useEffect, useState } from "react";
-import SectionHeader from "../../components/sectionHeader";
+import SectionHeader from "../../utils/sectionHeader";
 import { useParams } from "next/navigation";
-import SubsectionBodyContainer from "../../components/subsectionBodyContainer";
+import SubsectionBodyContainer from "../../utils/subsectionBodyContainer";
 import { retrieveUserInfo, UserInfo } from "@/session_storage_api/api";
 
 

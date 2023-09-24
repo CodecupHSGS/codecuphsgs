@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { retrieveUserInfo, UserInfo } from "@/session_storage_api/api";
-import NavBar from "./navbar";
-import BodyContainer from "./bodyContainer";
+import NavBar from "./components/navbar";
+import BodyContainer from "./utils/bodyContainer";
 // import { retrieveUserInfo } from "@/session_storage_api/api";
 import { useRouter } from "next/router";
 

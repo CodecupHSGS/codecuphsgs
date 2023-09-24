@@ -1,7 +1,7 @@
 "use client"; 
 
 import { ReactNode } from "react";
-import SectionHeader from "../components/sectionHeader";
+import SectionHeader from "../utils/sectionHeader";
 import { retrieveUserInfo } from "@/session_storage_api/api";
 
 const sectionTabs = [

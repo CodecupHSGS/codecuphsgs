@@ -4,7 +4,7 @@ import alertBackendAPIError from "@/app/utils/alertSystem/alertBackendAPIError";
 import { createGame } from "@/backend_api/games";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import FileSelect from "../../components/fileUpload";
+import FileSelect from "../../utils/fileUpload";
 
 export default function CreateGamePage() {
 

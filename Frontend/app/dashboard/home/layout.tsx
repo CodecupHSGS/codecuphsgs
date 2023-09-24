@@ -1,6 +1,6 @@
 "use client";
 
-import SubsectionBodyContainer from "../components/subsectionBodyContainer";
+import SubsectionBodyContainer from "../utils/subsectionBodyContainer";
 
 export default function DashboardLayout({
   children

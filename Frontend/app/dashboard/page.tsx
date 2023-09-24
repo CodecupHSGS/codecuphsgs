@@ -1,13 +1,23 @@
 "use client"; 
 
-import { retrieveUserInfo } from "@/session_storage_api/api";
+import { retrieveUserInfo, UserInfo } from "@/session_storage_api/api";
 import { redirect } from "next/navigation";
+import { type } from "os";
+import { useEffect, useState } from "react";
 
 export default function DashboardPage() { 
-    let userInfo = retrieveUserInfo(); 
-    console.log(userInfo); 
-    if(!userInfo) { 
-        redirect("/authentication/login"); 
-    }
-    redirect("/dashboard/home"); 
+    const [userInfo, setUserInfo] = useState<null | UserInfo>(null); 
+
+    // After the first render, redirect to the appropriate page
+    useEffect(() => { 
+        if(retrieveUserInfo() === null) { 
+            redirect("/authentication/login"); 
+        }
+        else { 
+            redirect("/dashboard/home"); 
+        }; 
+    }, [])
+
+    // During the server render and first render, return null
+    return null;    
 }

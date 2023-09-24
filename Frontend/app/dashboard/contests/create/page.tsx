@@ -1,6 +1,6 @@
 "use client"; 
 import alertBackendAPIError from '@/app/utils/alertSystem/alertBackendAPIError';
-import ContestInfoForm from '../../components/contestForm';
+import ContestInfoForm from '../../utils/contestForm';
 import { createContest } from '@/backend_api/contests';
 import { useRouter } from 'next/navigation';
 
