@@ -6,8 +6,6 @@ import { type } from "os";
 import { useEffect, useState } from "react";
 
 export default function DashboardPage() { 
-    const [userInfo, setUserInfo] = useState<null | UserInfo>(null); 
-
     // After the first render, redirect to the appropriate page
     useEffect(() => { 
         if(retrieveUserInfo() === null) { 
