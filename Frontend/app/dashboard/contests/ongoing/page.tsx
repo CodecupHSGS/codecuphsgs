@@ -15,7 +15,7 @@ export default function OngoingContests() {
             .filter(contestsInfo => contestsInfo.startDate < new Date() && contestsInfo.endDate >= new Date())
     
     return (
-        <div>
+        <div className="w-full overflow-auto">
             <ContestTable contestList={ongoingContestsInfo}/>
         </div>
     )

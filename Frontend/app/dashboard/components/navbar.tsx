@@ -13,8 +13,8 @@ export default function NavBar({
     return (
         <nav className="h-full w-full flex-col items-center justify-start text-white text-sm bg-black overflow-hidden" >
             <NavBarSection href="/dashboard">
-                <span className="sr-only">Hsgs Code Cup</span>
-                <Image className="h-24 w-full" src={hsgs_logo} alt=""></Image>
+            <span className="sr-only">Hsgs Code Cup</span>
+            <Image className="h-24 w-full" src={hsgs_logo} alt=""></Image>
             </NavBarSection>
             <NavBarSection href="/dashboard/contests" >Contests</NavBarSection>
             <NavBarSection href="/dashboard/games">Games</NavBarSection>

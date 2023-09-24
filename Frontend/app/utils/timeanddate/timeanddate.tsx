@@ -13,7 +13,7 @@ export default function TimeAndDateHyperLink({
      return (
           <Link href={`https://www.timeanddate.com/countdown/generic?iso=${dateWithOffset.toISOString()}&message=${URIEncodedMessage}`}
                target="_blank"
-               className=" text-blue-900 underline">
+               className=" text-blue-900">
                {date.toLocaleString()}
           </Link>
      )
