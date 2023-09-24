@@ -1,8 +1,8 @@
 "use client"; 
 
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { MouseEvent } from "react";
 export default function NavBarSection({
     href, children
 }: { 
@@ -18,8 +18,8 @@ export default function NavBarSection({
     return (
         <button 
             onClick={onClicked}
-            className="h-20 w-full flex justify-center items-center hover:bg-gray-100 hover:text-black">
-            {children}
+            className="h-20 w-full flex justify-center items-center hover:bg-gray-100 hover:text-black duration-300">
+            <Link href={href}>{children}</Link>
         </button>
     ); 
 }
