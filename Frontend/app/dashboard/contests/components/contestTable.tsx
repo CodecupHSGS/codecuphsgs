@@ -31,7 +31,7 @@ export default function ContestTable({contestList}: {contestList: ContestInfo[]}
     }
 
     return (
-        <table className="w-full m-auto table-fixed font-light border-2 border-gray-900 rounded-lg border-separate overflow-scroll">
+        <table className="w-full table-fixed font-light border-2 border-gray-900 rounded-lg border-separate">
             <thead className="bg-gray-100">
                 <tr>
                     <th className="p-4">Name</th>
