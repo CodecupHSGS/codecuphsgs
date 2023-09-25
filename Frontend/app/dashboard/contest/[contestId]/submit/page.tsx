@@ -25,8 +25,9 @@ export default function SubmitPage() {
         setFile(null); 
     }
 
-    function onCheckBoxChanged() { 
-        setIsOfficial((value) => !value); 
+    function onCheckBoxChanged(event: FormEvent) { 
+        const target = event.target as HTMLInputElement; 
+        setIsOfficial(target.checked); 
     }
 
     async function handleSubmit(event: FormEvent) { 
@@ -65,7 +66,7 @@ export default function SubmitPage() {
         (
             <form className="w-full p-4">
                 <label>
-                    <input type="checkbox" checked={isOfficial} onChange={onCheckBoxChanged}/>
+                    <input type="checkbox" onChange={onCheckBoxChanged}/>
                         &nbsp;
                     Submit officially 
                 </label>

@@ -1,5 +1,31 @@
 import { Invocation } from "@/backend_api/contests";
+import { useParams } from "next/navigation";
 export default function InvocationTable({invocations}: {invocations: Invocation[]}) { 
+    const params = useParams(); 
+
+    function createPlayerTag(subId: number, invo: Invocation) { 
+        const didWin = subId === invo.winner; 
+        if(invo.finishedJudging !== true) { 
+            return <p>{subId}</p>; 
+        }
+        if(didWin) { 
+            return <p className="text-green-700">{subId} (W)</p>; 
+        }
+        else { 
+            return <p className="text-red-700">{subId} (L)</p>; 
+        }
+    }
+
+    invocations.sort((a, b) => { 
+        if(a.createdDate < b.createdDate) { 
+            return 1; 
+        }
+        if(a.createdDate > b.createdDate) { 
+            return -1; 
+        }
+        return 0; 
+    })
+
     const tableBody = invocations === undefined || invocations === null || invocations.length === 0? 
         (
             <tr>
@@ -9,18 +35,22 @@ export default function InvocationTable({invocations}: {invocations: Invocation[
             </tr>
         ): 
         invocations.map((invocation, index) => { 
-            const firstPlayerTag = <p className="text-green-900">{invocation.submission1Id}</p>
-            const secondPlayerTag = <p className="text-red-900">{invocation.submission2Id}</p>; 
-            const winnerPlayerTag = invocation.finishedJudging? (invocation.winner === invocation.submission1Id? firstPlayerTag: secondPlayerTag)
-                : <p className="text-gray-700">Judging</p>
-            const viewResultTag = invocation.finishedJudging? <p>View log</p>: <></>; 
+            const firstPlayerTag = createPlayerTag(invocation.submission1Id, invocation); 
+            const secondPlayerTag = createPlayerTag(invocation.submission2Id, invocation);
+
+            const viewResultTag = invocation.finishedJudging? 
+                <a className="text-blue-700" 
+                    target="_blank"
+                    href={`/api/contest/${params.contestId}/invocationLog?invocationId=${invocation.invocationId}`}>
+                    View log
+                </a>
+                : <>Judging</>; 
 
             return (
                 <tr className="p-4" key={index}>
                     <td className="p-4">{invocation.createdDate.toLocaleString()}</td>
                     <td className="p-4">{firstPlayerTag}</td>
                     <td className="p-4">{secondPlayerTag}</td>
-                    <td className="p-4">{winnerPlayerTag} </td>
                     <td className="p-4"> {viewResultTag}</td>
                 </tr>
             )
@@ -33,7 +63,6 @@ export default function InvocationTable({invocations}: {invocations: Invocation[
                     <th className="p-4">Date</th>
                     <th className="p-4">First submission</th>
                     <th className="p-4">Second submission</th>
-                    <th className="p-4">Winner</th>
                     <th className="p-4">View result</th>
                 </tr>
             </thead>
