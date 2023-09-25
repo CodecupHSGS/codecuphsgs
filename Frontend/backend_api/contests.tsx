@@ -53,6 +53,7 @@ interface ContestResults {
     results: Object, 
     finishedJudging: boolean, 
     startedJudging: boolean, 
+    createdDate: Date, 
 }
 
 interface Invocation { 
@@ -116,13 +117,7 @@ async function getContestDetails(
 
     const {status, body} = await validateResponse(response); 
     
-    let contest; 
-    try { 
-        contest = body.contest; 
-    } catch(error) { 
-        console.log("Error at getContestDetails API: " + error); 
-        throw new ServerError(); 
-    }
+    const contest = body.contest; 
 
     const game = await getGameInfo(contest.gameId); 
 
@@ -228,21 +223,31 @@ async function getSubmissions({
 
 
 
-async function getResult(contestId:Number, includeUnofficial:boolean): Promise<ContestResults> {
+async function getResult({ 
+    contestId, 
+    includeUnofficial
+}: { 
+    contestId:Number, 
+    includeUnofficial:boolean
+}): Promise<ContestResults> {
     const response = await fetch(`/api/contest/${contestId}/results?includeUnofficial=${includeUnofficial}`);
     
     const {status, body} = await validateResponse(response);
-    return body.results; 
+    const {createdDate, ...rest} = body.results; 
+    return { 
+        createdDate: new Date(createdDate), 
+        ...rest
+    }; 
 }
 
-async function judgeContest({ 
+async function createRun({ 
     contestId, 
     includeUnofficial 
 }:{ 
     contestId: number, 
     includeUnofficial: boolean
 }) {
-    const response = await fetch(`/api/contest/${contestId}/judge?includeUnofficial=${includeUnofficial}`, {
+    const response = await fetch(`/api/contest/${contestId}/createRun?includeUnofficial=${includeUnofficial}`, {
         method: "POST"
     });
     
@@ -311,7 +316,7 @@ export {
     createContest, 
     getResult, 
     getSubmissions, 
-    judgeContest, 
+    createRun, 
     runInvocation, 
     getAllInvocations
 }

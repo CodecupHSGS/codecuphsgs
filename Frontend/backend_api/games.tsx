@@ -51,6 +51,7 @@ async function getGameInfo(
 ): Promise<GameInfo> {
 
     if(typeof gameId != "number") { 
+        console.log(typeof(gameId))
         throw new ValidationError("type of gameId is not number"); 
     }
 

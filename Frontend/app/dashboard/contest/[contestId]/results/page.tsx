@@ -1,53 +1,51 @@
 "use client"; 
 
 import { ContestResults, getResult } from "@/backend_api/contests";
-import { useContext, useEffect, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { contestDetailsContext } from "../layout";
+import UnfinishedRun from "./components/unfinishedMessage";
+import RunResultsDisplay from "./components/runResultsDisplay";
 
 export default function ResultPage() { 
     const params = useParams(); 
     const contestDetails = useContext(contestDetailsContext);  
-    const [contestResults, setcontestResults] = useState<null | ContestResults>(null); 
+    const [results, setResults] = useState<null | ContestResults>(null); 
     
-    const includeUnofficial = true; 
+    const [includeUnofficial, setIncludeUnofficial] = useState<boolean> (false); 
 
-    async function callFetchContestResults() { 
-        const new_results = await getResult(parseInt(params.contestId), includeUnofficial); 
-        setcontestResults(new_results); 
+    async function fetchAndSetContestResults() { 
+        const fetchedResults = await getResult({ 
+            contestId: parseInt(params.contestId), 
+            includeUnofficial
+        });  
+        setResults(fetchedResults); 
     }
+
+    // first render and every time the variable is updated
     useEffect( () => { 
-        callFetchContestResults();     
-    }, []); 
+        console.log("WTF"); 
+        fetchAndSetContestResults();     
+    }, [includeUnofficial]); 
 
-    if(contestDetails && contestDetails.endDate >= new Date()) { 
-        return (
-            <div>
-                This contest has not ended. &nbsp;
-            </div>
-        );
-    }
-    else if (contestResults === null) { 
+    if(contestDetails === null || results === null) { 
         return null; 
     }
-    else { 
-        console.log(contestResults.results); 
-        if(contestResults.finishedJudging) { 
-            return <>{JSON.stringify(contestResults.results)}</>; 
-        }
-        else if(contestResults.startedJudging) { 
-            return (
-                <div>
-                    This contest is being judged. &nbsp;
-                </div>
-            ); 
-        }
-        else { 
-            return (
-                <div>
-                    This contest has not been judged. &nbsp;
-                </div>
-            ); 
-        }
+
+    function onCheckBoxChanged(event: FormEvent) { 
+        const target = event.target as HTMLInputElement; 
+        setIncludeUnofficial(target.checked); 
     }
+
+    return (
+        <div className="w-full h-full flex flex-col gap-x-8">
+            <div className="w-full">
+                <label> 
+                    <input type="checkbox" onChange={onCheckBoxChanged}/>
+                    &nbsp; Include unofficial
+                </label>
+            </div>   
+            <RunResultsDisplay results={results}/>
+        </div>
+    )
 }
