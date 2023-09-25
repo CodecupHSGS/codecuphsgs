@@ -55,6 +55,15 @@ interface ContestResults {
     startedJudging: boolean, 
 }
 
+interface Invocation { 
+    invocationId: number, 
+    createdDate: Date, 
+    submission1Id: number, 
+    submission2Id: number, 
+    finishedJudging: boolean
+    winner: number, 
+}
+
 async function createContest(contestInfo:Object) : Promise<{
     success: boolean, 
     msg: string
@@ -81,11 +90,7 @@ async function createContest(contestInfo:Object) : Promise<{
 }
 
 async function getAllContests() : Promise<ContestInfo[]>{  
-    const response = await fetch("/api/contests", 
-        { 
-            method: "GET"
-        }
-    ); 
+    const response = await fetch("/api/contests"); 
 
     const { status, body} = await validateResponse(response); 
     
@@ -107,11 +112,7 @@ async function getAllContests() : Promise<ContestInfo[]>{
 async function getContestDetails(
     contestId: number
 ): Promise<ContestDetails> { 
-    const response = await fetch("/api/contest/" + contestId, 
-        { 
-            method: "GET"
-        }
-    ); 
+    const response = await fetch("/api/contest/" + contestId); 
 
     const {status, body} = await validateResponse(response); 
     
@@ -144,9 +145,11 @@ async function getContestDetails(
 }
 
 async function submitCode({
+    isOfficial, 
     contestId, 
     file
 }:{ 
+    isOfficial: boolean
     contestId: number, 
     file: File
 }): Promise<SubmissionInfo> {
@@ -160,6 +163,7 @@ async function submitCode({
     const data = new FormData(); 
 
     data.append("sourceCode", file); 
+    data.append("isOfficial", isOfficial.toString()); 
     const response = await fetch("/api/contest/" + contestId + "/submit", 
         { 
             method: "POST", 
@@ -225,10 +229,7 @@ async function getSubmissions({
 
 
 async function getResult(contestId:Number, includeUnofficial:boolean): Promise<ContestResults> {
-    const response = await fetch(`/api/contest/${contestId}/results?includeUnofficial=${includeUnofficial}`, 
-    { 
-        method: "GET"
-    });
+    const response = await fetch(`/api/contest/${contestId}/results?includeUnofficial=${includeUnofficial}`);
     
     const {status, body} = await validateResponse(response);
     return body.results; 
@@ -241,19 +242,64 @@ async function judgeContest({
     contestId: number, 
     includeUnofficial: boolean
 }) {
-    const response = await fetch(`/api/contest/${contestId}/judge?includeUnofficial=${includeUnofficial}`, 
-    { 
-        method: "GET"
+    const response = await fetch(`/api/contest/${contestId}/judge?includeUnofficial=${includeUnofficial}`, {
+        method: "POST"
     });
     
     const {status, body} = await validateResponse(response); 
+}
+
+async function runInvocation({ 
+    submission1Id, 
+    submission2Id, 
+    contestId
+}:{ 
+    submission1Id: number,
+    submission2Id: number, 
+    contestId: number, 
+}) {
+    const response = await fetch(`/api/contest/${contestId}/invoke`, { 
+        method: "POST", 
+        headers: {
+            'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify({submission1Id, submission2Id, contestId}),
+    });
+    
+    const {status, body} = await validateResponse(response); 
+}
+
+async function getAllInvocations({ 
+    contestId
+}:{ 
+    contestId: number
+}): Promise<Invocation[]> {
+    const response = await fetch(`/api/contest/${contestId}/invocations`);
+    
+    const {status, body} = await validateResponse(response); 
+    const { invocations } = body; 
+    
+    console.log(invocations); 
+
+    return  invocations.map((invocation: any) => { 
+        return {
+            invocationId: invocation.id, 
+            createdDate: new Date(invocation.createdDate), 
+            contestId: invocation.contestId, 
+            submission1Id: invocation.submission1Id, 
+            submission2Id: invocation.submission2Id, 
+            finishedJudging: invocation.finishedJudging, 
+            winner: invocation.winner, 
+        }
+    }); 
 }
 
 export type {  
     ContestInfo, 
     ContestDetails, 
     SubmissionInfo, 
-    ContestResults
+    ContestResults, 
+    Invocation
 }
 
 export { 
@@ -265,5 +311,7 @@ export {
     createContest, 
     getResult, 
     getSubmissions, 
-    judgeContest
+    judgeContest, 
+    runInvocation, 
+    getAllInvocations
 }

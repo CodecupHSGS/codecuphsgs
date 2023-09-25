@@ -34,7 +34,11 @@ export default function SubmitPage() {
 
         if(file) { 
            try { 
-               let submission = await submitCode({contestId: parseInt(params.contestId), file}); 
+               let submission = await submitCode({
+                    isOfficial, 
+                    contestId: parseInt(params.contestId), 
+                    file
+                }); 
 
                alert("Submitted!"); 
 

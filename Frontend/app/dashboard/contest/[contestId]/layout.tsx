@@ -60,20 +60,25 @@ export default function ContestDetailsLayout({
             adminRequired: false, 
         }, 
         { 
+            title: "Invocations", 
+            href: path + "/invocations",
+            adminRequired: false, 
+        }, 
+        { 
             title: "Results", 
             href: path + "/results",
             adminRequired: false, 
         }, 
         { 
-            title: "Update", 
-            href: path + "/update",
-            adminRequired: true, 
-        }, 
-        { 
             title: "Judge", 
             href: path + "/judge",
             adminRequired: true, 
-        }
+        }, 
+        { 
+            title: "Update", 
+            href: path + "/update",
+            adminRequired: true, 
+        },
     ]; 
 
     const sectionTabsFiltered = sectionTabs.filter((sectionTab) => { 
