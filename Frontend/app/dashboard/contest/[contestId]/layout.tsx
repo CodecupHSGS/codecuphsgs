@@ -88,6 +88,10 @@ export default function ContestDetailsLayout({
         return true; 
     }); 
 
+    if(userInfo === null) {
+        return null; 
+    }
+
     return (
         <div className="w-full">
             <contestDetailsContext.Provider value={contestDetails}>
