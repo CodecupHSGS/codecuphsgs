@@ -133,23 +133,27 @@ export default function ContestInfoForm({callback, contestInfo}: {callback: Func
                     <label className="block text-sm font-medium leading-6 text-gray-900">Contest Format</label>
                     <select onChange={onContestFormatSelect}>
                         <option value='ALL_VS_ALL'>Pairwise matches</option>    
-                        <option value='ROUND_16'>Round 16</option>
+                        {/* ROUND-16 IS CURRENTLY NOT SUPPORTED
+                        <option value='ROUND_16'>Round 16</option> 
+                        */}
                     </select>
                 </div>
+                {/* AUTOMATIC JUDGE IS CURRENTLY NOT SUPPORTED
                 <div className="sm:col-span-3">
                     <label className="block text-sm font-medium leading-6 text-gray-900">Judge Mode</label>
                     <select onChange={onJudgeModeSelect}>
                         <option value='MANUAL_JUDGE'>Judge manually</option>
                         <option value='AUTO_JUDGE'>Judge automatically</option>
                     </select>
-                </div>
+                </div> */}
+                {/* DEPRECATED: RUN TRIAL MATCHES IS NOT REPLACED WITH USERS' INVOCATIONS
                 <div className="sm:col-span-3">
                     <label className="block text-sm font-medium leading-6 text-gray-900">Run trial matches during the contest?</label>
                     <select onChange={onTrialJudgeSelect}>
                         <option value='yes'>Yes</option>
                         <option value='no'>No</option>
                     </select>
-                </div>
+                </div> */}
             </div>
         </div>
         <div className="mt-6 flex items-center justify-center gap-x-6">
