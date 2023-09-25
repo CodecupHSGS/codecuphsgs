@@ -53,7 +53,7 @@ export default function RunInvocationForm({
             <h2 className="leading-6 p-3 font-semibold bg-gray-100">Run a new invocation</h2>
             <div className="p-3">
                 <label className="block text-sm font-medium leading-6 text-gray-900">
-                    First submission's ID
+                    First submission&apos;s ID
                 </label>
                 <input 
                     onChange={onSubmission1IdChange}
@@ -62,7 +62,7 @@ export default function RunInvocationForm({
             </div>
             <div className="p-3">
                 <label className="block text-sm font-medium leading-6 text-gray-900">
-                    Second submission's ID
+                    Second submission&apos;s ID
                     <input 
                         onChange={onSubmission2IdChange}
                         className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black">
