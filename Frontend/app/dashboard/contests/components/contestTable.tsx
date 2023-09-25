@@ -25,7 +25,7 @@ export default function ContestTable({contestList}: {contestList: ContestInfo[]}
                     </Link>
                 </td>
                 <td className="p-4"><TimeAndDateHyperLink message={contest.contestName + " (Begin)"} date={contest.startDate}/></td>
-                <td className="p-4"><TimeAndDateHyperLink message={contest.contestName + " (End)"} date={contest.startDate}/></td>
+                <td className="p-4"><TimeAndDateHyperLink message={contest.contestName + " (End)"} date={contest.endDate}/></td>
             </tr>
         ))
     }
