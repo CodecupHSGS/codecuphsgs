@@ -1,12 +1,13 @@
 "use client"; 
 
-import { ReactNode } from "react";
+import { ReactNode, useContext } from "react";
 import SectionHeader from "../utils/sectionHeader";
 import { useLayoutEffect, useState } from "react";
 import { createContext } from "react";
 import { ContestInfo, getAllContests } from "@/backend_api/contests";
 import alertBackendAPIError from "@/app/utils/alertSystem/alertBackendAPIError";
 import { retrieveUserInfo } from "@/session_storage_api/api";
+import { userInfoContext } from "../layout";
 
 const sectionTabs = [
     {
@@ -42,7 +43,7 @@ export default function ContestsLayout({
     /* put the contestsInfo here to reduce the number of fetch request. 
     Persist until rerender contest page / reload */
     const [contestsInfo, setContestsInfo] = useState<ContestInfo[] | null> (null); 
-    const userInfo = retrieveUserInfo(); 
+    const userInfo = useContext(userInfoContext); 
 
     const sectionTabsFiltered = sectionTabs.filter((sectionTab) => { 
         if(sectionTab.adminRequired && userInfo?.userIsAdmin == false) { 
@@ -69,7 +70,7 @@ export default function ContestsLayout({
         }
     }, []); 
 
-    if(contestsInfo === null) { 
+    if(userInfo == null || contestsInfo === null) { 
         return null; 
     }
 
