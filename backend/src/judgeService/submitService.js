@@ -2,10 +2,9 @@ import fs from "fs";
 import axios from "axios";
 import FormData from "form-data"
 import {Server} from "socket.io";
-import EventEmitter from "events";
+import http from "http"; 
+import express from "express"
 import assert from "assert";
-import { response } from "express";
-import { resolve } from "path";
 
 const JUDGE_URL = process.env.JUDGE_URL; 
 const WORKER_PORT = process.env.WORKER_PORT; 
@@ -224,8 +223,9 @@ async function fetchResult(judgeReceiptId) {
  * Function to send a http request to fetch the log of a match 
  */
 async function fetchLog(judgeReceiptId) { 
+    let response; 
     try { 
-        const response = await axiosInstance.request({ 
+        response = await axiosInstance.request({ 
             method:'get', 
             url: `/log/${judgeReceiptId}`
         }); 
@@ -233,6 +233,7 @@ async function fetchLog(judgeReceiptId) {
         console.error("Error: fetching log failed");
         throw new Error("fetching log failed"); 
     }
+    
     if(response.status != 200) { 
         console.error("Error: judge fetch error"); 
         throw new Error("Judge fetching error"); 
@@ -242,8 +243,8 @@ async function fetchLog(judgeReceiptId) {
     console.log("logFile: ")
     console.log(text_data); 
     
-    const url = "./logs/logs_" + judgeReceiptId + ".txt"; 
-    fs.writeFile(url, text_data, (err) => { 
+    const url = process.cwd() + "/logs/logs_" + judgeReceiptId + ".txt"; 
+    fs.writeFileSync(url, text_data, (err) => { 
         console.error(err); 
     })
 
@@ -293,20 +294,22 @@ async function notifyJudgeServer() {
 }
 
 // Create a new socket server
-const io = new Server(WORKER_PORT);
+const app = express(); 
+const server = http.createServer(app); 
+const socketServer = new Server(server); 
 
 // When the socket server is listening, ping the judge server
-io.on('listening', notifyJudgeServer); 
+socketServer.on('listening', notifyJudgeServer); 
 
 // Handle new connection from judge
-io.on("connection", handleNewSocketConnection)
+socketServer.on("connection", handleNewSocketConnection)
+
+server.listen(WORKER_PORT, () => { 
+    console.log("Worker's http server listening on " + WORKER_PORT); 
+}); 
 
 const submitService = { 
     submit
-}
-
-submitService.close = async () => { 
-    await io.disconnect(); 
 }
 
 export default submitService; 
