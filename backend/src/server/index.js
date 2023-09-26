@@ -31,5 +31,6 @@ app.use(requestLoggerMiddleware);
 app.use(userRouter); 
 app.use(contestRouter); 
 app.use(gameRouter); 
+app.use(customRunRouter); 
 
 export default app; 
