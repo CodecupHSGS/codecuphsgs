@@ -2,13 +2,15 @@ import { Schema, model } from "mongoose";
 
 const userSchema = new Schema({
     id: {type: Number, required: true, unique: true}, 
-    username: {type: String, required: true, unique: true},
+    isAdmin: {type: Boolean, required: true, default: false}, 
     password: {type: String, required: true}, 
+
+    username: {type: String, required: true, unique: true},
     email: {type: String, required: true, unique: true}, 
 
-    name: {type: String, required: true}, 
-    isAdmin: {type: Boolean, default: false}, 
-    contests: {type: [Number], default: []}
+    registerDate: {type: Date, required: true, default: () => new Date()}, 
+
+    name: {type: String}, 
 })
 
 const UserModel = model('User', userSchema)

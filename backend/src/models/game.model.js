@@ -2,10 +2,16 @@ import { Schema, model } from "mongoose";
 
 const gameSchema = new Schema({
     id: {type: Number, required: true}, 
+
     name: {type: String, required: true}, 
-    createdDate: { type: Date, required: true}, 
-    statementUrl: {type: String}, 
+    createdDate: { type: Date, required: true, default: () => new Date()}, 
+    
+    summary: {type: String}, 
+
+    // URL to the judge file
     judgeUrl: {type: String, required: true}, 
+
+    statementUrl: {type: String}, 
     renderUrl: {type: String}, 
 })
 

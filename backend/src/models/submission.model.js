@@ -1,12 +1,17 @@
 import { Schema, model } from "mongoose";
 
 const submissionSchema = new Schema ({ 
-    id: {type: Number, required: true}, 
+    id: {type: Number, required: true, unique: true}, 
+    
     userId: {type: Number, required: true}, 
     contestId: {type: Number, required: true}, 
-    submissionDate: {type: Date, default: () => new Date()}, 
-    language: {type: String, default: "cpp"}, 
-    isOfficial: {type: Boolean, required: true}, 
+    
+    submissionDate: {type: Date, required: true, default: () => new Date()}, 
+    
+    language: {type: String, required: true, default: "cpp"}, 
+    
+    isOfficial: {type: Boolean, required: true},
+
     sourceUrl: {type: String, required: true}, 
 })
 
