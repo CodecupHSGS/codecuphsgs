@@ -1,38 +1,21 @@
-import RunModel from "../../models/run.model";
-import ContestModel from "../../models/contest.model";
-import SubmissionModel from "../../models/submission.model";
-import GameModel from "../../models/game.model"
+import RunModel from "../../models/run.model.js";
+import ContestModel from "../../models/contest.model.js";
+import SubmissionModel from "../../models/submission.model.js";
+import GameModel from "../../models/game.model.js"
+import assert from "assert";
 
 export default class AllVsAllStateMachine { 
     /**
      * A state machine for all-vs-all contests, which is able to cache and resume unfinished runs in the database 
      */
-    #contestOptions; 
     #contestId; 
     #runId; 
     #cache; 
     #results;   
 
-    constructor({runId, contestOptions}) { 
-        if(typeof runId === "number") { 
-            // This state machine will continue a previous run. 
-
-            this.#runId = runId; 
-        }
-        else { 
-            // This state machine will start a completely new run. 
-            
-            if(runId !== undefined && runId !== null) { 
-                throw new Error("Unregconizable type of runId parameter at AllVsAllStateMachine"); 
-            }
-
-            const { contestId, includeUnofficial } = contestOptions; 
-            if(typeof contestId !== "number" || typeof includeUnofficial != "boolean") { 
-                throw new Error("Arguments have wrong types at AllVsAllStateMachine"); 
-            }
-
-            this.#contestOptions = contestOptions; 
-        }
+    constructor(runId) { 
+        assert(typeof runId === "number");  
+        this.#runId = runId; 
     }
 
     /**
@@ -42,12 +25,21 @@ export default class AllVsAllStateMachine {
     async init() { 
         console.log("StateMachine initializing"); 
 
-        if(this.#runId !== null && this.#runId !== undefined) { 
-            // Restore data from the previous run. 
-            const runDocument = await RunModel.findOne({id: this.#runId}); 
-            this.#contestId = runDocument.contestId; 
+        const runDocument = await RunModel.findOne({id: this.#runId}); 
+        this.#contestId = runDocument.contestId; 
+
+        try { 
             this.#cache = JSON.parse(runDocument.cache);
             this.#results = JSON.parse(runDocument.results);  
+        } catch(err) { 
+            console.error("StateMachine: Parsing old data failed" + runDocument.cache + "\n" + runDocument.results); 
+            // invalid old data. reset everthing
+            this.#cache = {}; 
+            this.#results = {}; 
+        }
+        
+        if(this.#cache.initialized !== undefined) {
+            // Continuing an old run 
 
             // Clean up all the matches marked as pending in the previous run. 
             // Will rejudge all of them. 
@@ -62,43 +54,27 @@ export default class AllVsAllStateMachine {
         else {
             // Initialize a new run
             console.log("Finding contest data"); 
-            const contestDocument = await ContestModel.findOne({id: this.#contestOptions.contestId}); 
+            const contestDocument = await ContestModel.findOne({id: this.#contestId}); 
             console.log("Contest data found"); 
 
-            // Create a new run and save in the database
-            this.#runId = (await RunModel.count({})) + 1; 
-
-            console.log("New runId" + this.#runId); 
-
-            const runDocument = await RunModel.create({
-                id: this.#runId, 
-                startDate: new Date(), 
-                contestId: this.#contestOptions.contestId, 
-                includeUnofficial: this.#contestOptions.includeUnofficial
-            })
-
-            console.log("Created new run in database"); 
-
-            // Contest Id
-            this.#contestId = this.#contestOptions.contestId; 
-
             // Initalize cache and result and save in the database
-            this.#cache = {}; 
+            this.#cache = {};
+            this.#cache.initialized = true;  
 
             // Get the final submissions from users. 
-            if(this.#contestOptions.includeUnofficial) { 
+            if(runDocument.includeUnofficial) { 
                 this.#cache.finalSubmissions = contestDocument.finalSubmissions; 
             }
             else { 
                 this.#cache.finalSubmissions = contestDocument.finalOfficialSubmissions; 
             }
-
             console.log("List of final Submissions: ", this.#cache.finalSubmissions); 
             this.#cache.matchResults = {}; 
+
             this.#results = {}; 
             this.#results.matches = []; 
-
-            await this.#updateDocument(); 
+            
+            await this.#saveData(); 
         }
     }
     
@@ -153,7 +129,7 @@ export default class AllVsAllStateMachine {
                             logUrl
                         })
                     
-                        await this.#updateDocument(); 
+                        await this.#saveData(); 
                     }
 
                     return { 
@@ -197,7 +173,7 @@ export default class AllVsAllStateMachine {
      * string is chosen as type of cache and result since objects are not 
      * automatically saved when they are changed. 
      */
-    async #updateDocument() { 
+    async #saveData() { 
         await RunModel.findOneAndUpdate({
             id: this.#runId
         }, { 
@@ -213,7 +189,8 @@ export default class AllVsAllStateMachine {
         await RunModel.findOneAndUpdate({
             id: this.#runId
         }, { 
-            endDate: new Date(), 
+            finishedJudging: true, 
+            judgingFinishedDate: new Date(), 
             cache: JSON.stringify(this.#cache), 
             results: JSON.stringify(this.#results), 
         }); 
