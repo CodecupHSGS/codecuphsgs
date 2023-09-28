@@ -8,6 +8,8 @@ import requestLoggerMiddleware from "../middlewares/requestLoggerMiddleware.js";
 import userRouter from "../routers/user.router.js";
 import gameRouter from "../routers/game.router.js";
 import contestRouter from "../routers/contest.router.js";
+import customRunRouter from "../routers/customRun.router.js"
+import errorHandler from "../middlewares/errorHandler.js";
 
 const app = express();
 
@@ -32,5 +34,8 @@ app.use(userRouter);
 app.use(contestRouter); 
 app.use(gameRouter); 
 app.use(customRunRouter); 
+
+// ERROR HANDLER
+app.use(errorHandler); 
 
 export default app; 

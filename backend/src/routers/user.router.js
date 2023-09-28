@@ -4,15 +4,25 @@ import {
     endSession, 
 } from "../middlewares/authenticate.js"; 
 
-import * as userController from "../controllers/user.controller.js"
+import userController from "../controllers/user.controller.js"
+import serviceErrorHandler from "../middlewares/serviceErrorHandler.js";
+import expressAsyncHandler from "express-async-handler";
 
 const userRouter = Router()
 
-userRouter.post("/register", userController.createUser)
-userRouter.post("/login", createSession)
-userRouter.post("/logout", endSession)
+userRouter.post("/register", expressAsyncHandler(userController.createUser))
 
-userRouter.get("/user/:userId", userController.getUser)
-userRouter.get("/users", userController.getAllUsers)
+userRouter.post("/login", expressAsyncHandler(createSession))
+
+userRouter.post("/logout", expressAsyncHandler(endSession))
+
+userRouter.get("/user/:userId", expressAsyncHandler(userController.getUser))
+
+/**
+ * CURRENTLY NOT SUPPORTED
+ */
+// userRouter.get("/users", userController.getAllUsers)
+
+userRouter.use(serviceErrorHandler); 
 
 export default userRouter; 
