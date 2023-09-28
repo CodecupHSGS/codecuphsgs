@@ -334,13 +334,12 @@ async function getLogForInvocation({
     invocationId, 
 }) { 
     if(typeof userId !== "number" || typeof invocationId !== "number") { 
-        console.error("getLog Service: Error: Wrong argument types"); 
-        throw new ServiceError("Wrong argument type"); 
+        throw new ValidationError("Wrong argument type"); 
     } 
 
     const invocationDocument = await InvocationModel.findOne({id: invocationId}); 
     if(invocationDocument.userId !== userId) { 
-        throw new ConflictError("UserId does not match with invocation.userId"); 
+        throw new ConflictError("User ID and invocation's owner does not match"); 
     }
 
     const matchId = invocationDocument.matchId;

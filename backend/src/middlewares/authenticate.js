@@ -1,6 +1,6 @@
 import session from "express-session";
 import UserModel from "../models/user.model.js";
-import { userInfoRestrictedView, userInfoUnrestrictedView } from "../utils/user.js";
+import { userInfoRestrictedView, userInfoUnrestrictedView } from "../views/user.js";
 import bcrypt from "bcrypt"; 
 
 async function createSession(req, res, next) {    

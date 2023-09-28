@@ -18,10 +18,10 @@ export default function gameFilesUpload(req, res, next) {
         }
         else { 
             if(!req.files) { 
-                console.error("Upload did not encouter error but no file found"); 
+                console.error("Upload did not encouter error but file info not found"); 
                 res.status(500).send({msg: "Internal server error"}); 
             }
-            console.log("Saving file successful. ")
+            console.log("Saving files successful. ")
             console.log("File info: "); 
             console.log(req.files); 
             next(); 

@@ -15,10 +15,6 @@ export default function customRunFilesUpload(req, res, next) {
             res.status(500).send({msg: "Uploading file failed"});
         }
         else { 
-            if(!req.files) { 
-                console.error("Upload did not encouter error but no file found"); 
-                res.status(500).send({msg: "Internal server error"}); 
-            }
             console.log("Saving file successful. ")
             console.log("File info: "); 
             console.log(req.files); 

@@ -1,4 +1,4 @@
 export default function requestLoggerMiddleware(req, res, next) { 
-    console.log("Server received request from " + req.url); 
+    console.log("Server received request at " + req.url); 
     next(); 
 }
