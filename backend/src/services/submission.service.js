@@ -7,22 +7,19 @@ import UserModel from "../models/user.model.js";
 import ConflictError from "./errors/conflictError.js";
 import ValidationError from "./errors/validationError.js";
 
-/**
- * TEMPORARILY NOT SUPPORTED
- */
-// async function getSubmission({contestId}) { 
-//     if(typeof contestId != "number") { 
-//         throw new ValidationError("contest id is not a number"); 
-//     }
+async function getSubmission({submissionId}) { 
+    if(typeof submissionId != "number") { 
+        throw new ValidationError("Submission id is not a number"); 
+    }
     
-//     const submissionDocument = await SubmissionModel.findOne({id}); 
+    const submissionDocument = await SubmissionModel.findOne({id: submissionId}); 
 
-//     if(!submissionDocument) { 
-//          throw new ConflictError("No submission with such ");
-//     }
+    if(!submissionDocument) { 
+         throw new ConflictError("No submission with such id");
+    }
 
-//     return submissionDocument.toObject(); 
-// }
+    return submissionDocument.toObject(); 
+}
 
 async function createSubmission({contestId, userId, sourceUrl}) { 
     // validate inputs
@@ -55,7 +52,8 @@ async function createSubmission({contestId, userId, sourceUrl}) {
 }
 
 const submissionService = {  
-    createSubmission
+    createSubmission, 
+    getSubmission
 }
 
 export default submissionService; 

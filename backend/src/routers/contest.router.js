@@ -17,7 +17,11 @@ contestRouter.get("/contest/:contestId/", expressAsyncHandler(contestController.
 
 contestRouter.post("/contest/:contestId/submit", userCodeUpload, expressAsyncHandler(contestController.createSubmission));
 
-contestRouter.get("/contest/:contestId/submissions", expressAsyncHandler(contestController.getSubmissions))
+contestRouter.get("/contest/:contestId/submissions", expressAsyncHandler(contestController.getSubmissions)); 
+
+contestRouter.get("/submission/:submissionId/", expressAsyncHandler(contestController.getSubmission)); 
+
+contestRouter.get("/submission/:submissionId/downloadSource", expressAsyncHandler(contestController.downloadSubmission)); 
 
 contestRouter.get("/contest/:contestId/results", expressAsyncHandler(contestController.getContestResults)); 
 

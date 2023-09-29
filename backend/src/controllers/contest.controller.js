@@ -9,6 +9,7 @@ import { submissionRestrictedView } from "../views/submission.js";
 import {isStringBoolean, stringToBoolean} from "./utils/stringBoolean.js"
 
 import centralEventEmitter from "../pubsub/centralEventEmitter.js"; 
+import submissionService from "../services/submission.service.js";
 
 async function getAllContests(req, res, next) { 
     let contests = await contestService.getAllContests(); 
@@ -167,6 +168,54 @@ async function getSubmissions(req, res, next) {
     return res.status(200).send({submissions}); 
 }
 
+async function getSubmission(req, res, next) { 
+    const userId = req.session.userId; 
+    const submissionIdString = req.params.submissionId; 
+    
+    if(isNaN(submissionIdString)) { 
+        throw new BadRequestError("Missing or wrong type of paramater"); 
+    }
+
+    if(userId == null) { 
+        throw new UnauthorisedError("User not logged in"); 
+    }
+
+    let submission = await submissionService.getSubmission({submissionId: parseInt(submissionIdString)}); 
+
+    if(req.session.isAdmin !== true && submission.userId !== userId) { 
+        throw new UnauthorisedError("User is not the owner nor an admin"); 
+    }
+
+    if(!req.session.isAdmin) { 
+        submission = submissionRestrictedView(submission); 
+    }
+
+    return res.status(200).send({submission}); 
+}
+
+
+async function downloadSubmission(req, res, next) { 
+    console.log(req.session); 
+    const userId = req.session.userId; 
+    const submissionIdString = req.params.submissionId; 
+    
+    if(isNaN(submissionIdString)) { 
+        throw new BadRequestError("Missing or wrong type of paramater"); 
+    }
+
+    if(userId == null) { 
+        throw new UnauthorisedError("User not logged in"); 
+    }
+
+    const submission = await submissionService.getSubmission({submissionId: parseInt(submissionIdString)}); 
+
+    if(req.session.isAdmin !== true && submission.userId !== userId) { 
+        throw new UnauthorisedError("User is not the owner nor an admin"); 
+    }
+
+    return res.status(200).download(submission.sourceUrl, `${submission.id}.${submission.language}`); 
+}
+
 async function getContestResults(req, res, next) { 
     const contestIdString = req.params.contestId; 
     const includeUnofficialString = req.query.includeUnofficial; 
@@ -197,10 +246,9 @@ async function createRun(req, res, next) {
     if(!isStringBoolean(includeUnofficialString)) { 
         throw new BadRequestError("Missing or wrong type of includeUnofficial"); 
     }
-    
+
     const contestId = parseInt(contestIdString); 
     const includeUnofficial = stringToBoolean(includeUnofficialString); 
-
 
     const run = await contestService.createRun({
         contestId, 
@@ -208,7 +256,15 @@ async function createRun(req, res, next) {
     }); 
 
     // Announcing to subscribing workers
-    centralEventEmitter.emit("new_run", run.id);  
+    console.log("malo")
+
+    try { 
+        centralEventEmitter.emit("new_run", run.id);  
+    } catch(e) { 
+        console.error(e); 
+    }
+
+    console.log("ljfldsjf"); 
     
     return res.status(200).send({msg: "Run created"}); 
 }
@@ -283,7 +339,7 @@ async function getLogForInvocation(req, res, next) {
 
     const logUrl = await contestService.getLogForInvocation({userId, invocationId});
 
-    res.status(200).download(logUrl); 
+    return res.status(200).download(logUrl); 
 }
 
 const contestController = { 
@@ -292,8 +348,10 @@ const contestController = {
     getContest, 
     // deleteContest, 
     createSubmission, 
+    downloadSubmission, 
     getContestResults, 
     getSubmissions, 
+    getSubmission, 
     createRun, 
     invoke, 
     getAllInvocations, 
