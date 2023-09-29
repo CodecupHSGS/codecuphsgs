@@ -1,8 +1,5 @@
-
-import "./dotenv.js"; 
-
-console.log("ENV: ")
-console.log(process.env); 
+const MONGODB_URI = process.env.MONGODB_URI; 
+const HTTP_SERVER_PORT = process.env.HTTP_SERVER_PORT; 
 
 import mongoose from "mongoose"; 
 
@@ -10,19 +7,12 @@ import mongoose from "mongoose";
 mongoose.set('strictQuery', true);
 mongoose.connect(process.env.MONGODB_URI)
 
+// load workers
+import "./workers/invocationWorker.js"
+import "./workers/runWorker.js"
+
+// load main express app
 import app from "./server/index.js";
-// import contestPostEndingProcessor from "./worker/index.js";
-
-// contestPostEndingProcessor.start(); 
-
-// START LISTENING
-const server = app.listen(5000, () => { 
+const server = app.listen(process.env.HTTP_SERVER_PORT, () => { 
     console.log("server on"); 
 })
-
-// tests
-// import judgeAPIWrapper from "./worker/judgeAPIWrapper.js";
-
-// judgeAPIWrapper.on("ready", () => { 
-//     judgeAPIWrapper.submit(13, 13); 
-// }); 
