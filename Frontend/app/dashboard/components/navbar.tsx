@@ -19,6 +19,8 @@ export default function NavBar({
             <NavBarSection href="/dashboard/contests" >Contests</NavBarSection>
             <NavBarSection href="/dashboard/games">Games</NavBarSection>
             {(userInfo != null && 
+                <NavBarSection href="/dashboard/customRun">Custom Run</NavBarSection>)}
+            {(userInfo != null && 
                 <NavBarSection href="/dashboard/settings">Settings</NavBarSection>)}
             {(userInfo != null && 
                 <NavBarSection href="/authentication/logout">Logout</NavBarSection>)}
