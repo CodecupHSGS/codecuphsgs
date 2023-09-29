@@ -53,7 +53,7 @@ interface ContestResults {
     results: Object, 
     finishedJudging: boolean, 
     startedJudging: boolean, 
-    createdDate: Date, 
+    runCreatedDate: Date, 
 }
 
 interface Invocation { 
@@ -221,7 +221,25 @@ async function getSubmissions({
     }
 }
 
+async function getSubmission({ 
+    submissionId
+}: { 
+    submissionId: number
+}): Promise<SubmissionInfo> {
+    const response = await fetch(`/api/submission/${submissionId}`); 
 
+    const {status, body} = await validateResponse(response); 
+
+    const {submission} = body; 
+
+    return { 
+        submissionId: submission.id, 
+        contestId: submission.contestId, 
+        userId: submission.userId, 
+        submissionDate: submission.submissionDate, 
+        isOfficial: submission.isOfficial
+    }
+}
 
 async function getResult({ 
     contestId, 
@@ -233,9 +251,9 @@ async function getResult({
     const response = await fetch(`/api/contest/${contestId}/results?includeUnofficial=${includeUnofficial}`);
     
     const {status, body} = await validateResponse(response);
-    const {createdDate, ...rest} = body.results; 
+    const {runCreatedDate, ...rest} = body.results; 
     return { 
-        createdDate: new Date(createdDate), 
+        runCreatedDate: new Date(runCreatedDate), 
         ...rest
     }; 
 }
@@ -316,6 +334,7 @@ export {
     createContest, 
     getResult, 
     getSubmissions, 
+    getSubmission, 
     createRun, 
     runInvocation, 
     getAllInvocations
