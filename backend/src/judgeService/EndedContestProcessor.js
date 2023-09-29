@@ -19,7 +19,7 @@ export default class EndedContestProcessor {
      * of the previous matches
      */
     async process() { 
-        console.log("Contest processor processing contest")
+        console.log("Contest processor processing")
 
         // Wait for the contest state machine to fetch from database
         // and finish initialization
@@ -30,7 +30,7 @@ export default class EndedContestProcessor {
         while(true) { 
             // Hold until there is a new match
             const nextMatch = await this.#contestStateMachine.yieldNextUnjudgedMatch(); 
-            console.log("StateMachine yielded next match: " + nextMatch); 
+            // console.log("StateMachine yielded next match: " + nextMatch); 
 
             // There is no new match
             if(nextMatch === null) { 

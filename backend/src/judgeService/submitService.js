@@ -6,12 +6,12 @@ import http from "http";
 import express from "express"
 import assert from "assert";
 
-const JUDGE_URL = process.env.JUDGE_URL; 
-const WORKER_PORT = process.env.WORKER_PORT; 
+const JUDGE_SERVER_URL = process.env.JUDGE_SERVER_URL; 
+const SOCKET_SERVER_PORT = process.env.SOCKET_SERVER_PORT; 
 
 // Axios instance to make http requests to the judge server
 const axiosInstance = axios.create({
-    baseURL: JUDGE_URL, 
+    baseURL: JUDGE_SERVER_URL, 
     timeout:5000, 
 });
 
@@ -28,7 +28,6 @@ class Locker {
     #freed = {}; 
 
     lock(id) { 
-        console.log("Locking id: " + id)
         if(this.#promises[id] !== undefined) { 
             throw new Error("This id has already been locked"); 
         }
@@ -88,7 +87,7 @@ async function blockUntilJudgeConnected() {
  * Function to handle a new conection (from the judge)
  */
 function handleNewSocketConnection(socket) { 
-    console.log("Accecpted connection from the judge server"); 
+    console.log("Accecepted connection from the judge server"); 
 
     // Create a listener to the judges' judging complete notifications. 
     // Once the notification is received, free the lock on this receipt id so that 
@@ -127,6 +126,8 @@ async function submit(judgeUrl, sourceUrl1, sourceUrl2) {
     // Make a http request to fetch the result of the match
     const result = await fetchResult(judgeReceiptId);
 
+    console.log(result); 
+
     assert(result.winner === 1 || result.winner === 2); 
     const firstPlayerWin = result.winner === 1; 
 
@@ -148,9 +149,6 @@ async function sendFiles(judgeUrl, sourceUrl1, sourceUrl2) {
 
     const formData = new FormData(); 
     
-    console.log("Judge source: " + judgeUrl); 
-    console.log("User source: " + sourceUrl1 + ",\n" + sourceUrl2); 
-    
     if(!fs.existsSync(sourceUrl1) || !fs.existsSync(sourceUrl2) || !fs.existsSync(judgeUrl)) { 
         console.error("Error at sendFiles: file does not exists"); 
         throw new Error("file does not exists"); 
@@ -159,11 +157,6 @@ async function sendFiles(judgeUrl, sourceUrl1, sourceUrl2) {
     formData.append('judge', fs.createReadStream(judgeUrl), "judge.cpp"); 
     formData.append('player1', fs.createReadStream(sourceUrl1), "player1.cpp"); 
     formData.append('player2', fs.createReadStream(sourceUrl2), "player2.cpp");
-
-    // console.log("Form data: "); 
-    // console.log(formData); 
-
-    console.log("Judge Server URL: " + `${JUDGE_URL}/submit`); 
     
     let response; 
     try { 
@@ -240,8 +233,6 @@ async function fetchLog(judgeReceiptId) {
     }
 
     const text_data = response.data; 
-    console.log("logFile: ")
-    console.log(text_data); 
     
     const url = process.cwd() + "/logs/logs_" + judgeReceiptId + ".txt"; 
     fs.writeFileSync(url, text_data, (err) => { 
@@ -304,8 +295,8 @@ socketServer.on('listening', notifyJudgeServer);
 // Handle new connection from judge
 socketServer.on("connection", handleNewSocketConnection)
 
-server.listen(WORKER_PORT, () => { 
-    console.log("Worker's http server listening on " + WORKER_PORT); 
+server.listen(SOCKET_SERVER_PORT, () => { 
+    console.log("Worker's http server listening on " + SOCKET_SERVER_PORT); 
 }); 
 
 const submitService = { 

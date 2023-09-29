@@ -3,7 +3,6 @@ import multer from "multer";
 
 const storageEngine = multer.diskStorage({
     destination: function (req, file, cb) {
-      console.log(file); 
       cb(null, '/Users/hoanggiapvu/Documents/codecuphsgs/backend/uploads'); 
     },
     filename: function (req, file, cb) { 

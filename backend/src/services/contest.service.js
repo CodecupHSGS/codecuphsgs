@@ -186,8 +186,6 @@ async function getSubmissionsWithUsername({contestId, includeUnofficial, mapFunc
         submissions = submissions.map(mapFunc); 
     }
 
-    console.log(submissions); 
-
     const submissionsWithUsername = await Promise.all(submissions.map(async (submission) => { 
         const username = (await UserModel.findOne({id: submission.userId})).username; 
         return { 
@@ -236,8 +234,6 @@ async function getContestResults({contestId, includeUnofficial}) {
             finishedJudging: false, 
         }
     }
-
-    console.log(runDocuments.length); 
 
     const lastRun = runDocuments[0].toObject(); 
     return {

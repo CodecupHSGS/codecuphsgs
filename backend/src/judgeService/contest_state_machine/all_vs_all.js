@@ -53,9 +53,7 @@ export default class AllVsAllStateMachine {
         } 
         else {
             // Initialize a new run
-            console.log("Finding contest data"); 
             const contestDocument = await ContestModel.findOne({id: this.#contestId}); 
-            console.log("Contest data found"); 
 
             // Initalize cache and result and save in the database
             this.#cache = {};
@@ -150,9 +148,6 @@ export default class AllVsAllStateMachine {
      */
     async #fetchSourceUrl(submissionId) { 
         const submissionDocument = await SubmissionModel.findOne({id: submissionId}); 
-        console.log("Submission: "); 
-        console.log(submissionDocument); 
-        console.log(submissionDocument.sourceUrl)
         return submissionDocument.sourceUrl; 
     }
 
@@ -163,8 +158,6 @@ export default class AllVsAllStateMachine {
     async #fetchJudgeUrl() { 
         const contestDocument = await ContestModel.findOne({id: this.#contestId}); 
         const gameDocument = await GameModel.findOne({id: contestDocument.gameId}); 
-        console.log("game: ")
-        console.log(gameDocument); 
         return gameDocument.judgeUrl; 
     }
 
