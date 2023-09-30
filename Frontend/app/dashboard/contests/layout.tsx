@@ -8,6 +8,7 @@ import { ContestInfo, getAllContests } from "@/backend_api/contests";
 import alertBackendAPIError from "@/app/utils/alertSystem/alertBackendAPIError";
 import { retrieveUserInfo } from "@/session_storage_api/api";
 import { userInfoContext } from "../layout";
+import SubsectionBodyContainer from "../utils/subsectionBodyContainer";
 
 const sectionTabs = [
     {
@@ -77,7 +78,7 @@ export default function ContestsLayout({
     return (
         <ContestsInfoContext.Provider value={contestsInfo}>
             <SectionHeader sectionTabs={sectionTabsFiltered}></SectionHeader>
-            <div className="w-full text-sm p-6">{children}</div>
+            <SubsectionBodyContainer>{children}</SubsectionBodyContainer>
         </ContestsInfoContext.Provider>
     )
 }
