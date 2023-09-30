@@ -1,11 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import FileSelect from "../utils/fileUpload";
 import { customRun } from "@/backend_api/customRun";
 import alertBackendAPIError from "@/app/utils/alertSystem/alertBackendAPIError";
+import { userInfoContext } from "../layout";
+import { redirect } from "next/navigation";
 
 export default function CustomRun() { 
+    const userInfo = useContext(userInfoContext); 
+
+    if(userInfo === null) { 
+        return null; 
+    }
+
+    if(userInfo.userId == null) { 
+        redirect("/authentication/login"); 
+    }
 
     const [judgeFile, setJudgeFile] = useState<File | null>(null); 
     const [sourceFile1, setSourceFile1] = useState<File | null>(null); 
