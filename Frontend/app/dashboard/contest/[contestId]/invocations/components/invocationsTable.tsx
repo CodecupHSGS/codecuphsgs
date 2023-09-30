@@ -42,7 +42,7 @@ export default function InvocationTable({invocations}: {invocations: Invocation[
                 <a className="text-blue-700" 
                     target="_blank"
                     href={`/api/contest/${params.contestId}/invocationLog?invocationId=${invocation.invocationId}`}>
-                    View log
+                    Download log
                 </a>
                 : <>Judging</>; 
 
