@@ -30,7 +30,7 @@ export default function GamesLayout({
     }
 
     const sectionTabsFiltered = sectionTabs.filter((sectionTab) => { 
-        if(sectionTab.adminRequired && userInfo.userIsAdmin == false) { 
+        if(sectionTab.adminRequired && !userInfo.userIsAdmin) { 
             return false; 
         }
 
