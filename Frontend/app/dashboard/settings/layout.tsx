@@ -1,14 +1,16 @@
 "use client"; 
 
-import { ReactNode } from "react";
+import { ReactNode, useContext } from "react";
 import SectionHeader from "../utils/sectionHeader";
 import SubsectionBodyContainer from "../utils/subsectionBodyContainer";
+import { userInfoContext } from "../layout";
 
 const sectionTabs = [
     {
-        href:"/dashboard/settings/general", 
-        title:"General", 
+        href:"/dashboard/settings/account", 
+        title:"Account", 
         adminRequired:false, 
+        loginRequired:true, 
     }
 ]
 
@@ -17,11 +19,22 @@ export default function SettingsLayout({
 }: { 
     children: ReactNode
 }) { 
+    const userInfo = useContext(userInfoContext); 
 
+    if(userInfo === null) { 
+        return null; 
+    }
+
+    const sectionTabsFiltered = sectionTabs.filter(sectionTab => { 
+        if(sectionTab.loginRequired && userInfo.userId === undefined) { 
+            return false; 
+        }
+        return true; 
+    })
    
     return (
         <div className="w-full h-full">
-            <SectionHeader sectionTabs={sectionTabs}></SectionHeader>
+            <SectionHeader sectionTabs={sectionTabsFiltered}></SectionHeader>
             <SubsectionBodyContainer>
                 {children}
             </SubsectionBodyContainer>

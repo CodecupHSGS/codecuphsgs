@@ -1,4 +1,17 @@
-export default function GeneralSettingPage() { 
+"use client"; 
+
+import { useContext } from "react"
+import { userInfoContext } from "../../layout"
+
+export default function AccountPage() { 
+    const userInfo = useContext(userInfoContext); 
+
+    if(userInfo === null || userInfo.userId === undefined) { 
+        return null; 
+    }
+
+    
+
     return (
         <form className="w-1/2 m-auto mt-10">
             <div className="space-y-12">
@@ -25,11 +38,12 @@ export default function GeneralSettingPage() {
                             <input type="text" name="last-name" id="last-name" autoComplete="family-name" className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"></input>
                         </div>
                     </div>
+                    {/* NOT SUPPORTED FOR NOW
                     <div className="col-span-full">
                         <label className="block text-sm font-medium leading-6 text-gray-900">About</label>
                         <p className="text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
                         <textarea id="about" name="about" className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6"></textarea>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className="mt-6 flex items-center justify-center gap-x-6">
