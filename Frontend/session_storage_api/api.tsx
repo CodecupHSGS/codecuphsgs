@@ -4,6 +4,10 @@ interface UserInfo {
     userIsAdmin: boolean; 
 }
 
+function deleteUserInfo() { 
+    sessionStorage.setItem('userInfo', JSON.stringify({})); 
+}
+
 function saveUserInfo(userInfo: UserInfo | null) { 
     sessionStorage.setItem('userInfo', JSON.stringify(userInfo)); 
 }
@@ -29,6 +33,7 @@ export type {
 }
 
 export {  
+    deleteUserInfo, 
     saveUserInfo, 
     retrieveUserInfo
 }
