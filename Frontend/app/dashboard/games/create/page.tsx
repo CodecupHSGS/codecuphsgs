@@ -29,7 +29,7 @@ export default function CreateGamePage() {
             alert("Warning: no statement file chosen"); 
         }
 
-        else if(!judgeFile) { 
+        if(!judgeFile) { 
             alert("Error: missing judge file"); 
         }
 
