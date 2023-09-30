@@ -14,7 +14,10 @@ export default function SubmissionTable({submissions}: {submissions: SubmissionI
         submissions.map((submission, index) => (
             <tr className="p-4" key={index}>
                 <td className="p-4">
-                    {submission.submissionId}
+                    <a href={`/dashboard/submission/${submission.submissionId}`}
+                        className="underline">
+                            {submission.submissionId}
+                    </a>
                 </td>
                 <td className="p-4">{submission.username}</td>
                 <td className="p-4">
