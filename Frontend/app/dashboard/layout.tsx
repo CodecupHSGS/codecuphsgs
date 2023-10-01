@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useState, createContext } from "react";
-import { retrieveUserInfo, UserInfo } from "@/session_storage_api/api";
+import { useState, createContext } from "react";
+import { UserInfo } from "@/session_storage_api/api";
 import NavBar from "./components/navbar";
 import BodyContainer from "./utils/bodyContainer";
+import alertBackendAPIError from "../utils/alertSystem/alertBackendAPIError";
+import { getCurrentUserInfo } from "@/backend_api/users";
 
 const userInfoContext = createContext<null|UserInfo>(null); 
 
@@ -12,11 +14,22 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {  
-  // sessionStorage only available after mounting -> useEffect to retrieveUserInfo
   const [userInfo, setUserInfo] = useState<null | UserInfo>(null); 
-  useEffect(() => { 
-    setUserInfo(retrieveUserInfo()); 
-  }, [])
+  
+  async function fetchUserInfoAndRerender() {
+    try { 
+      const newUserInfo = await getCurrentUserInfo(); 
+      setUserInfo(newUserInfo);     
+    } catch(err) { 
+      alertBackendAPIError(err, "Fetching user info"); 
+    }
+  }
+
+  if(userInfo == null) { 
+    fetchUserInfoAndRerender(); 
+    return null; 
+  }
+
   return (
       <div className="w-full h-full bg-white grid grid-cols-[6vw_94vw]">
           <userInfoContext.Provider value={userInfo}>

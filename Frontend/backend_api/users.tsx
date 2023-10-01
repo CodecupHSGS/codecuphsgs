@@ -98,8 +98,25 @@ async function login({
 
 }
 
+async function getCurrentUserInfo(): Promise<UserInfo> {
+    const response = await fetch("/api/user/current"); 
+    
+    if(response.status === 403) { 
+        // backend response: not logged in 
+        return {} as UserInfo; 
+    }
+
+    const {status, body} = await validateResponse(response); 
+    return { 
+        userId: body.user.id, 
+        username: body.user.username, 
+        userIsAdmin: body.user.isAdmin
+    }
+}
+
 export { 
     signup, 
     login, 
-    logout
+    logout, 
+    getCurrentUserInfo
 }
