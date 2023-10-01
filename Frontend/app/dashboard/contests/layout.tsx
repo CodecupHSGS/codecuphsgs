@@ -1,6 +1,6 @@
 "use client"; 
 
-import { ReactNode, useContext } from "react";
+import { ReactNode, useContext, useEffect } from "react";
 import SectionHeader from "../utils/sectionHeader";
 import { useLayoutEffect, useState } from "react";
 import { createContext } from "react";
@@ -56,8 +56,11 @@ export default function ContestsLayout({
         }
     }
 
-    if(contestsInfo == null) { 
+    useEffect(() => { 
         refetchContestsInfo(); 
+    }, []); 
+
+    if(contestsInfo == null) { 
         return null; 
     }
 

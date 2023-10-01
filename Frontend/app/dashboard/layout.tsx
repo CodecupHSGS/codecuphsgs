@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import { UserInfo } from "@/session_storage_api/api";
 import NavBar from "./components/navbar";
 import BodyContainer from "./utils/bodyContainer";
@@ -25,8 +25,11 @@ export default function DashboardLayout({
     }
   }
 
-  if(userInfo == null) { 
+  useEffect(() => { 
     fetchUserInfoAndRerender(); 
+  }, []); 
+
+  if(userInfo == null) { 
     return null; 
   }
 
