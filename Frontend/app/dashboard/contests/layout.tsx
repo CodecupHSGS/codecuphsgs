@@ -46,34 +46,31 @@ export default function ContestsLayout({
     const [contestsInfo, setContestsInfo] = useState<ContestInfo[] | null> (null); 
     const userInfo = useContext(userInfoContext); 
 
-    const sectionTabsFiltered = sectionTabs.filter((sectionTab) => { 
-        if(sectionTab.adminRequired && userInfo?.userIsAdmin == false) { 
-            return false; 
-        }
-        return true; 
-    }); 
-    
     async function refetchContestsInfo() { 
         try { 
-            const contestsInfo = await getAllContests(); 
-            setContestsInfo(contestsInfo); 
+            const newContestsInfo = await getAllContests(); 
+            setContestsInfo(newContestsInfo); 
         }
         catch(error) { 
             alertBackendAPIError(error, "contestInfoRefetcher"); 
         }
     }
 
-    useLayoutEffect(() => { 
-        try { 
-            refetchContestsInfo(); 
-        } catch(error) { 
-            alert(error); 
-        }
-    }, []); 
-
-    if(userInfo == null || contestsInfo === null) { 
+    if(contestsInfo == null) { 
+        refetchContestsInfo(); 
         return null; 
     }
+
+    if(userInfo == null) { 
+        return null; 
+    }
+
+    const sectionTabsFiltered = sectionTabs.filter((sectionTab) => { 
+        if(sectionTab.adminRequired && userInfo.userIsAdmin !== true) { 
+            return false; 
+        }
+        return true;    
+    }); 
 
     return (
         <ContestsInfoContext.Provider value={contestsInfo}>
