@@ -8,6 +8,10 @@ import { userInfoContext } from "../layout";
 import { redirect } from "next/navigation";
 
 export default function CustomRun() { 
+    const [judgeFile, setJudgeFile] = useState<File | null>(null); 
+    const [sourceFile1, setSourceFile1] = useState<File | null>(null); 
+    const [sourceFile2, setSourceFile2] = useState<File | null>(null); 
+
     const userInfo = useContext(userInfoContext); 
 
     if(userInfo === null) { 
@@ -17,10 +21,6 @@ export default function CustomRun() {
     if(userInfo.userId == null) { 
         redirect("/authentication/login"); 
     }
-
-    const [judgeFile, setJudgeFile] = useState<File | null>(null); 
-    const [sourceFile1, setSourceFile1] = useState<File | null>(null); 
-    const [sourceFile2, setSourceFile2] = useState<File | null>(null); 
 
     function handleCancel() { 
         setJudgeFile(null); 
