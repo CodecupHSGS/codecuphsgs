@@ -52,6 +52,25 @@ async function getUser(req, res, next) {
 }
 
 /**
+ * Controllers to handle requests for the user in the session. 
+ */
+async function getCurrentUser(req, res, next) { 
+    const userId = req.session.userId; 
+
+    // return empty object if there is no current user. 
+    if(userId == null) { 
+        return res.status(403).send({msg: "No session created"}); 
+    }
+
+    const foundUser = await userService.getUser({id: userId}); 
+
+    const userClientView = req.session.isAdmin? userInfoUnrestrictedView(foundUser): userInfoRestrictedView(foundUser); 
+
+    return res.status(200).send({
+        user: userClientView
+    })
+}
+/**
  * CURRENTLY NOT SUPPORTED
  */
 
@@ -75,6 +94,7 @@ async function getUser(req, res, next) {
 const userController = { 
     createUser, 
     getUser, 
+    getCurrentUser
     // getAllUsers, 
 }
 

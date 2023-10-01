@@ -16,7 +16,9 @@ userRouter.post("/login", expressAsyncHandler(createSession))
 
 userRouter.post("/logout", expressAsyncHandler(endSession))
 
-userRouter.get("/user/:userId", expressAsyncHandler(userController.getUser))
+userRouter.get("/user/:userId(\d+)", expressAsyncHandler(userController.getUser))
+
+userRouter.get("/user/current", expressAsyncHandler(userController.getCurrentUser))
 
 /**
  * CURRENTLY NOT SUPPORTED
