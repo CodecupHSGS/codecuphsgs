@@ -5,9 +5,15 @@ import {Server} from "socket.io";
 import http from "http"; 
 import express from "express"
 import assert from "assert";
+import path from "path";
 
 const JUDGE_SERVER_URL = process.env.JUDGE_SERVER_URL; 
 const SOCKET_SERVER_PORT = process.env.SOCKET_SERVER_PORT; 
+
+const LOG_DIR = path.join(process.cwd(), process.env.LOG_DIR); 
+if(!fs.existsSync(LOG_DIR)) { 
+  fs.mkdirSync(LOG_DIR); 
+}
 
 // Axios instance to make http requests to the judge server
 const axiosInstance = axios.create({
@@ -234,7 +240,7 @@ async function fetchLog(judgeReceiptId) {
 
     const text_data = response.data; 
     
-    const url = process.cwd() + "/logs/logs_" + judgeReceiptId + ".txt"; 
+    const url = LOG_DIR + "/logs_" + judgeReceiptId + ".txt"; 
     fs.writeFileSync(url, text_data, (err) => { 
         console.error(err); 
     })
