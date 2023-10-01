@@ -4,9 +4,9 @@ import {ReactNode, createContext, useEffect, useState, useContext} from "react";
 import SectionHeader from "../../utils/sectionHeader";
 import { useParams } from "next/navigation";
 import SubsectionBodyContainer from "../../utils/subsectionBodyContainer";
-import { retrieveUserInfo, UserInfo } from "@/session_storage_api/api";
 import { ContestDetails, getContestDetails } from "@/backend_api/contests";
 import { userInfoContext } from "../../layout";
+import alertBackendAPIError from "@/app/utils/alertSystem/alertBackendAPIError";
 
 const contestDetailsContext = createContext<null | ContestDetails>(null); 
 
@@ -21,19 +21,13 @@ export default function ContestDetailsLayout({
     const [contestDetails, setContestDetails] = useState<null | ContestDetails>(null); 
 
     async function fetchAndSetContestDetails() {
-        setContestDetails(await getContestDetails(parseInt(params.contestId))); 
-        console.log("setting context lmao");
+        try { 
+            setContestDetails(await getContestDetails(parseInt(params.contestId))); 
+            console.log("setting context lmao");
+        } catch(err) { 
+            alertBackendAPIError(err, "fetching and setting contest details"); 
+        }
     }
-
-    // After first render
-    useEffect(() => { 
-        fetchAndSetContestDetails(); 
-    }, []); 
-
-    // // During first render, the user's information is not available. 
-    // if(userInfo === null) { 
-    //     return null; 
-    // }
 
     const path = "/dashboard/contest/" + params.contestId; 
 
@@ -42,55 +36,74 @@ export default function ContestDetailsLayout({
             title: "Overview", 
             href: path + "/overview",
             adminRequired: false, 
-
+            loginRequired: false, 
         }, 
         { 
             title: "Statement", 
             href: path + "/statement",
             adminRequired: false, 
+            loginRequired: false, 
         }, 
         { 
             title: "Submit", 
             href: path + "/submit",
             adminRequired: false, 
+            loginRequired: true, 
         }, 
         { 
             title: "Submissions", 
             href: path + "/submissions",
             adminRequired: false, 
+            loginRequired: false, 
         }, 
         { 
             title: "Invocations", 
             href: path + "/invocations",
             adminRequired: false, 
+            loginRequired: true, 
         }, 
         { 
             title: "Results", 
             href: path + "/results",
             adminRequired: false, 
+            loginRequired: false, 
         }, 
         { 
             title: "Judge", 
             href: path + "/judge",
             adminRequired: true, 
+            loginRequired: true, 
         }, 
         { 
             title: "Update", 
             href: path + "/update",
             adminRequired: true, 
+            loginRequired: true, 
         },
     ]; 
 
+    // During first render, the user's information is not available. 
+    if(userInfo == null) { 
+        return null; 
+    }
+
+    if(contestDetails == null) { 
+        fetchAndSetContestDetails(); 
+        return null; 
+    }
+
     const sectionTabsFiltered = sectionTabs.filter((sectionTab) => { 
-        if(sectionTab.adminRequired && userInfo?.userIsAdmin == false) { 
+        // filter out the admin-only sections. userInfo.userIsAdmin can either be undefined (not logged in)
+        // or false (logged in and not admin) or true (logged in and is admin)
+        if(sectionTab.adminRequired && userInfo.userIsAdmin !== true) { 
+            return false; 
+        }
+        if(sectionTab.loginRequired && userInfo.userId == undefined) { 
             return false; 
         }
         return true; 
     }); 
 
-    if(userInfo === null) {
-        return null; 
-    }
 
     return (
         <div className="w-full">
