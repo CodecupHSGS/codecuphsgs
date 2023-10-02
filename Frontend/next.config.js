@@ -1,10 +1,13 @@
 /** @type {import('next').NextConfig} */
+
+const BACKEND_URL = process.env.BACKEND_URL; 
+console.log(BACKEND_URL)
 module.exports = () => {
     const rewrites = () => {
         return [
         {
             source: "/api/:path*",
-            destination: 'http://localhost:5000/:path*' // proxyto backend
+            destination: `${BACKEND_URL}/:path*` // proxyto backend
         },
         ];
     };
