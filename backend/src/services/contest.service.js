@@ -1,9 +1,9 @@
-import ContestModel from "../models/contest.model.js";
-import SubmissionModel from "../models/submission.model.js";
+import ContestModel, { getNextContestId } from "../models/contest.model.js";
+import SubmissionModel, { getNextSubmissionId } from "../models/submission.model.js";
 import UserModel from "../models/user.model.js";
-import RunModel from "../models/run.model.js"; 
-import InvocationModel from "../models/invocation.model.js"; 
-import MatchModel from "../models/match.model.js"; 
+import RunModel, { getNextRunId } from "../models/run.model.js"; 
+import InvocationModel, { getNextInvocationId } from "../models/invocation.model.js"; 
+import MatchModel, { getNextMatchId } from "../models/match.model.js"; 
 
 import ServiceError from "./errors/serviceError.js";
 import ValidationError from "./errors/validationError.js";
@@ -71,7 +71,7 @@ async function createContest({name, gameId, startDate, endDate}) {
     }
 
     const reformattedContest = {
-        id: await ContestModel.count() + 1, 
+        id: await getNextContestId(), 
         name, 
         startDate, 
         endDate, 
@@ -137,7 +137,7 @@ async function createSubmission({
     }
 
     const insertedSubmission = await SubmissionModel.create({
-        id: await SubmissionModel.count({}) + 1, 
+        id: await getNextSubmissionId(), 
         contestId, 
         userId, 
         sourceUrl, 
@@ -207,7 +207,8 @@ async function createRun({ contestId, includeUnofficial }) {
         throw new ConflictError("No contest with such id exist"); 
     }
 
-    const runId = (await RunModel.count({})) + 1;
+    const runId = await getNextRunId();
+
     const runDocument = await RunModel.create({
         id: runId, 
         contestId, 
@@ -270,7 +271,7 @@ async function runInvocation({
         throw new ConflictError("Both submissions are not the user's"); 
     }
 
-    const matchId = await MatchModel.count({}) + 1; 
+    const matchId = await getNextMatchId(); 
 
     const matchDocument = await MatchModel.create({
         id: matchId, 
@@ -279,7 +280,7 @@ async function runInvocation({
         submission2Id, 
     })
 
-    const invocationId = await InvocationModel.count({}) + 1; 
+    const invocationId = await getNextInvocationId(); 
 
     const invocationDocument = await InvocationModel.create({
         id: invocationId, 

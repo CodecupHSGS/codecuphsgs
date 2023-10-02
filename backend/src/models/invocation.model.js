@@ -1,5 +1,6 @@
 
 import { Schema, model } from "mongoose";
+import getCountAndAdd from "./counter.js";
 
 const invocationSchema = new Schema({
     id: {type: Number, required: true}, 
@@ -13,3 +14,7 @@ const invocationSchema = new Schema({
 
 const InvocationModel = model('invocation', invocationSchema)
 export default InvocationModel; 
+
+export async function getNextInvocationId() { 
+	return await getCountAndAdd('invocation'); 
+}

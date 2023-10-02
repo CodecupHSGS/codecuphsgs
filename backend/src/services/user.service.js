@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt"
 
-import UserModel from "../models/user.model.js"
+import UserModel, { getNextUserId } from "../models/user.model.js"
 
 import ValidationError from "./errors/validationError.js";
 import ConflictError from "./errors/conflictError.js";
@@ -27,7 +27,7 @@ async function createUser({
 
 
     const userDocument = await UserModel.create({ 
-        id: await UserModel.count() + 1, 
+        id: await getNextUserId(), 
         username: username, 
         password: await bcrypt.hash(password, 10), 
         email: email

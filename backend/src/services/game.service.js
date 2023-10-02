@@ -1,6 +1,6 @@
 import fs from "fs"
 
-import GameModel from "../models/game.model.js";
+import GameModel, { getNextGameId } from "../models/game.model.js";
 
 import ConflictError from "./errors/conflictError.js";
 import ValidationError from "./errors/validationError.js"
@@ -15,7 +15,7 @@ async function createGame({name, judgeUrl, ...rest}) {
     }
 
     const game = await GameModel.create({
-        id: await GameModel.count() + 1, 
+        id: await getNextGameId(), 
         name, 
         judgeUrl, 
         ...rest

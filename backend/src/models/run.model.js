@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import getCountAndAdd from "./counter.js";
 
 const runSchema = { 
     id: {type: Number, required: true, unique: true}, 
@@ -19,3 +20,7 @@ const runSchema = {
 
 const RunModel = new model("run", runSchema); 
 export default RunModel; 
+
+export async function getNextRunId() { 
+	return await getCountAndAdd('run'); 
+}

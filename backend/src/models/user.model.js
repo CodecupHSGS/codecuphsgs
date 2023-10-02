@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import getCountAndAdd from "./counter.js";
 
 const userSchema = new Schema({
     id: {type: Number, required: true, unique: true}, 
@@ -17,3 +18,6 @@ const UserModel = model('User', userSchema)
 
 export default UserModel; 
 
+export async function getNextUserId() { 
+	return await getCountAndAdd('user'); 
+}

@@ -1,4 +1,5 @@
 import { Schema, SchemaType, model } from "mongoose";
+import getCountAndAdd from "./counter.js";
 
 const contestSchemaOptions = { discriminatorKey: 'contestFormat'}; 
 
@@ -20,4 +21,8 @@ const contestSchema = new Schema({
 
 const  ContestModel = model('Contest', contestSchema)
 export default ContestModel; 
+
+export async function getNextContestId() { 
+	return await getCountAndAdd('contest'); 
+}
 

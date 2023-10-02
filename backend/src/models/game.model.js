@@ -1,7 +1,8 @@
 import { Schema, model } from "mongoose";
+import getCountAndAdd from "./counter.js";
 
 const gameSchema = new Schema({
-    id: {type: Number, required: true}, 
+    id: {type: Number, required: true, unique: true}, 
 
     name: {type: String, required: true}, 
     createdDate: { type: Date, required: true, default: () => new Date()}, 
@@ -17,3 +18,7 @@ const gameSchema = new Schema({
 
 const GameModel = model('game', gameSchema)
 export default GameModel; 
+
+export async function getNextGameId() { 
+	return await getCountAndAdd('game'); 
+}

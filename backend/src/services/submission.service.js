@@ -1,7 +1,7 @@
 import fs from "fs"; 
 
 import ContestModel from "../models/contest.model.js";
-import SubmissionModel from "../models/submission.model.js";
+import SubmissionModel, { getNextSubmissionId } from "../models/submission.model.js";
 import UserModel from "../models/user.model.js";
 
 import ConflictError from "./errors/conflictError.js";
@@ -40,7 +40,7 @@ async function createSubmission({contestId, userId, sourceUrl}) {
         throw new ConflictError("No contest with such contestId"); 
     }
 
-    const submissionId = await SubmissionModel.count() + 1; 
+    const submissionId = await getNextSubmissionId(); 
     const submissionDocument = await SubmissionModel.create({
         id: submissionId, 
         contestId, 

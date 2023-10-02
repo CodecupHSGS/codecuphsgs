@@ -1,5 +1,6 @@
 
 import { Schema, model } from "mongoose";
+import getCountAndAdd from "./counter.js";
 
 const matchSchema = new Schema({
     id: {type: Number, required: true, unique: true}, 
@@ -20,3 +21,7 @@ const matchSchema = new Schema({
 
 const MatchModel = model('match', matchSchema)
 export default MatchModel; 
+
+export async function getNextMatchId() { 
+	return await getCountAndAdd('match'); 
+}
