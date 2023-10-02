@@ -9,7 +9,7 @@ Visit <a href=https://github.com/CodecupHSGS/cpp-pvpjudge>CPP-PvP-judge</a> for 
 
 ```
 docker pull hoanggiapvuvhg/codecuphsgs_backend
-docker run -e JUDGE_SERVER_URL={URL of the judge server} -e MONGODB_URI={URI of your MongoDB connection} -p {host port}:8000 -v {docker volume}:/usr/src/app/files -p {host port}:5000 hoanggiapvuvhg/codecuphsgs_backend
+docker run -e JUDGE_SERVER_URL={URL of the judge server} -e MONGODB_URI={URI of your MongoDB connection} -p {host port}:8000 --mount source={docker volume},target=/usr/src/app/files -p {host port}:5000 hoanggiapvuvhg/codecuphsgs_backend
 ```
 
 <h3>Pull and run the docker image for the front-end server</h3>
